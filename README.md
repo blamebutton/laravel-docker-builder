@@ -8,8 +8,8 @@ composer require --dev blamebutton/laravel-docker-builder
 
 ## Usage
 
-Add `DOCKER_IMAGE_TAG` to your `.env` and run:
+Set the `DOCKER_NGINX_TAG` and `DOCKER_PHP_TAG` environment variables and run:
 
 ```shell
-vendor/bin/docker/build
+vendor/bin/docker-build
 ```
