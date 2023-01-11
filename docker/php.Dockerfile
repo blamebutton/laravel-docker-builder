@@ -5,7 +5,7 @@ WORKDIR /app
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions @composer
 ## Install dependencies
-COPY / /app
+COPY / /app/
 RUN composer install --optimize-autoloader --no-dev
 
 # Vite.js build
@@ -28,7 +28,7 @@ RUN install-php-extensions bcmath pdo_pgsql redis
 
 WORKDIR /app
 
-COPY / /app
+COPY / /app/
 COPY --from=node /app/public/build/ /app/public/build/
 COPY --from=composer /app/vendor/ /app/vendor/
 
