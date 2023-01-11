@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source .env
-
 PACKAGE="$(dirname "${BASH_SOURCE[0]}")/.."
 
 if ! [[ -f "${PWD}/public/index.php" ]]; then
@@ -12,6 +10,18 @@ fi
 if ! [[ -f "${PWD}/.dockerignore" ]]; then
   echo "Missing [/.dockerignore], copying...";
   cp "${PACKAGE}/docker/.dockerignore" "${PWD}/.dockerignore"
+fi
+
+if ! [[ -f "$PWD/.docker/nginx.dockerfile" ]]; then
+  echo "Dockerfile [/.docker/nginx.dockerfile] not found."
+  echo "Run: php artisan docker:generate"
+  exit 1
+fi
+
+if ! [[ -f "$PWD/.docker/php.dockerfile" ]]; then
+  echo "Dockerfile [/.docker/php.dockerfile] not found."
+  echo "Run: php artisan docker:generate"
+  exit 1
 fi
 
 NGINX_TAG="${DOCKER_NGINX_TAG}"
@@ -27,13 +37,11 @@ if [[ -z "${PHP_TAG}" ]]; then
   exit 1
 fi
 
-echo "Building [${NGINX_TAG}]"
 docker build \
   --tag "${NGINX_TAG}" \
   --file "${PWD}/.docker/nginx.dockerfile" \
   "${PWD}"
 
-echo "Building [${PHP_TAG}]"
 docker build \
   --tag "${PHP_TAG}" \
   --file "${PWD}/.docker/php.dockerfile" \

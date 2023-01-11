@@ -9,9 +9,6 @@
             "email": "bram@ceulemans.dev"
         }
     ],
-    "bin": [
-        "bin/docker-build"
-    ],
     "require": {
         "php": "^8.0",
         "illuminate/contracts": "^9.47",

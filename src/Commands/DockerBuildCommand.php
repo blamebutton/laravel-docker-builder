@@ -2,7 +2,6 @@
 
 namespace BlameButton\LaravelDockerBuilder\Commands;
 
-use BlameButton\LaravelDockerBuilder\DockerServiceProvider;
 use Symfony\Component\Process\Process;
 
 class DockerBuildCommand extends BaseCommand
@@ -16,6 +15,10 @@ class DockerBuildCommand extends BaseCommand
         $process = new Process(
             command: [$command],
             cwd: base_path(),
+            env: [
+                'DOCKER_NGINX_TAG' => config('docker-builder.tags.nginx'),
+                'DOCKER_PHP_TAG' => config('docker-builder.tags.php'),
+            ],
         );
 
         $process->run(function ($type, $buffer) {

@@ -18,11 +18,11 @@ class DockerServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__ . '/../config/docker-build.php' => config_path('docker-build.php'),
+            __DIR__ . '/../config/docker-builder.php' => config_path('docker-builder.php'),
         ]);
 
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/docker-build.php', 'docker-builder',
+            __DIR__ . '/../config/docker-builder.php', 'docker-builder',
         );
     }
 
