@@ -32,8 +32,8 @@ RUN install-php-extensions bcmath pdo_pgsql redis
 WORKDIR /app
 
 COPY / /app
-COPY --from=node /app/public/build /app/public/build
-COPY --from=composer /app/vendor/ /app/vendor
+COPY --from=node /app/public/build /app/public/build/
+COPY --from=composer /app/vendor/ /app/vendor/
 
 RUN chown --recursive www-data:www-data /app/storage
 
