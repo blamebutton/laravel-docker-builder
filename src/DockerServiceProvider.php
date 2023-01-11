@@ -16,6 +16,14 @@ class DockerServiceProvider extends ServiceProvider
                 DockerGenerateCommand::class,
             ]);
         }
+
+        $this->publishes([
+            __DIR__ . '/../config/docker-build.php' => config_path('docker-build.php'),
+        ]);
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/docker-build.php', 'docker-builder',
+        );
     }
 
     public static function getPackagePath(string $path = null): string

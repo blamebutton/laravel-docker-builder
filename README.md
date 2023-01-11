@@ -28,6 +28,12 @@ DOCKER_PHP_TAG=laravel-app:php
 DOCKER_NGINX_TAG=laravel-app:nginx DOCKER_PHP_TAG=laravel-app:php vendor/bin/docker-build
 ```
 
+### Option 3: Config File
+
+```shell
+php artisan vendor:publish --provider="BlameButton\LaravelDockerBuilder\DockerServiceProvider"
+```
+
 ## Usage
 
 Set the `DOCKER_NGINX_TAG` and `DOCKER_PHP_TAG` environment variables and run:
