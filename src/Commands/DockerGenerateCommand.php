@@ -38,13 +38,13 @@ class DockerGenerateCommand extends BaseCommand
             ]),
         ]);
 
-        if (!is_dir($dir = base_path('.docker'))) {
+        if (! is_dir($dir = base_path('.docker'))) {
             mkdir($dir);
         }
 
         foreach ($dockerfiles as $file => $content) {
             // Example: $PWD/.docker/{php,nginx}.dockerfile
-            $dockerfile = sprintf("%s/%s", $dir, $file);
+            $dockerfile = sprintf('%s/%s', $dir, $file);
 
             // Save Dockerfile contents
             file_put_contents($dockerfile, $content);
@@ -117,16 +117,14 @@ class DockerGenerateCommand extends BaseCommand
         );
     }
 
-
     protected function getOptions(): array
     {
-
         return [
             new InputOption(
                 name: 'php-version',
                 shortcut: 'p',
                 mode: InputOption::VALUE_REQUIRED,
-                description: sprintf("PHP version (supported: %s)", join(', ', PhpVersion::values())),
+                description: sprintf('PHP version (supported: %s)', implode(', ', PhpVersion::values())),
             ),
             new InputOption(
                 name: 'optimize',
@@ -138,13 +136,13 @@ class DockerGenerateCommand extends BaseCommand
                 name: 'node-package-manager',
                 shortcut: 'm',
                 mode: InputOption::VALUE_REQUIRED,
-                description: sprintf('Node Package Manager (supported: %s)', join(', ', NodePackageManager::values())),
+                description: sprintf('Node Package Manager (supported: %s)', implode(', ', NodePackageManager::values())),
             ),
             new InputOption(
                 name: 'node-build-tool',
                 shortcut: 'b',
                 mode: InputOption::VALUE_REQUIRED,
-                description: sprintf('Node Build Tool (supported: %s)', join(', ', NodeBuildTool::values())),
+                description: sprintf('Node Build Tool (supported: %s)', implode(', ', NodeBuildTool::values())),
             ),
         ];
     }

@@ -11,11 +11,12 @@ trait InteractsWithTwig
 
     private function twig(): TwigEnvironment
     {
-        if (!is_null($this->twig)) {
+        if (! is_null($this->twig)) {
             return $this->twig;
         }
         $path = package_path('docker/template');
         $loader = new FilesystemLoader($path);
+
         return $this->twig = new TwigEnvironment($loader);
     }
 

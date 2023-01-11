@@ -35,6 +35,7 @@
         "sort-packages": true
     },
     "require-dev": {
+        "laravel/pint": "^1.4",
         "orchestra/testbench": "^7.19"
     }
 }

@@ -15,6 +15,7 @@ abstract class BaseCommand extends Command
             choices: array_merge($choices, [self::NONE]),
             default: $default,
         );
+
         return $choice === self::NONE ? false : $choice;
     }
 }
