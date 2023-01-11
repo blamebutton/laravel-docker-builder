@@ -30,11 +30,11 @@ fi
 echo "Building [${NGINX_TAG}]"
 docker build \
   --tag "${NGINX_TAG}" \
-  --file "${PACKAGE}/docker/nginx.Dockerfile" \
+  --file "${PWD}/.docker/nginx.dockerfile" \
   "${PWD}"
 
 echo "Building [${PHP_TAG}]"
 docker build \
   --tag "${PHP_TAG}" \
-  --file "${PACKAGE}/docker/php.Dockerfile" \
+  --file "${PWD}/.docker/php.dockerfile" \
   "${PWD}"

@@ -2,6 +2,7 @@
 
 namespace BlameButton\LaravelDockerBuilder\Commands;
 
+use BlameButton\LaravelDockerBuilder\Commands\Choices\ArtisanOptimize;
 use BlameButton\LaravelDockerBuilder\Commands\Choices\NodeBuildTool;
 use BlameButton\LaravelDockerBuilder\Commands\Choices\NodePackageManager;
 use BlameButton\LaravelDockerBuilder\Commands\Choices\PhpVersion;
@@ -11,10 +12,6 @@ use Symfony\Component\Console\Input\InputOption;
 class DockerGenerateCommand extends BaseCommand
 {
     use InteractsWithTwig;
-
-    const YES = 'yes';
-    const NO = 'no';
-    const NONE = 'none';
 
     protected $name = 'docker:generate';
 
@@ -41,12 +38,85 @@ class DockerGenerateCommand extends BaseCommand
             ]),
         ]);
 
-        $dockerfiles->each(function ($value, $key) {
-            $this->info($key);
-        });
+        if (!is_dir($dir = base_path('.docker'))) {
+            mkdir($dir);
+        }
+
+        foreach ($dockerfiles as $file => $content) {
+            // Example: $PWD/.docker/{php,nginx}.dockerfile
+            $dockerfile = sprintf("%s/%s", $dir, $file);
+
+            // Save Dockerfile contents
+            file_put_contents($dockerfile, $content);
+
+            // Output saved Dockerfile location
+            $filename = str($dockerfile)->after(base_path())->trim('/');
+            $this->info(sprintf('Saved: %s', $filename));
+        }
 
         return self::SUCCESS;
     }
+
+    private function getPhpVersion(): string
+    {
+        if ($option = $this->option('php-version')) {
+            return in_array($option, PhpVersion::values())
+                ? $option
+                : throw new \InvalidArgumentException("Invalid value [$option] for option [php-version]");
+        }
+
+        return $this->choice(
+            question: 'PHP version',
+            choices: PhpVersion::values(),
+            default: PhpVersion::v8_2,
+        );
+    }
+
+    public function getArtisanOptimize(): bool
+    {
+        if ($this->option('optimize')) {
+            return true;
+        }
+
+        $choice = $this->choice(
+            question: 'Do you want to run "php artisan optimize" when the image boots?',
+            choices: ArtisanOptimize::values(),
+            default: ArtisanOptimize::YES,
+        );
+
+        return ArtisanOptimize::YES === $choice;
+    }
+
+    private function getNodePackageManager(): string|false
+    {
+        if ($option = $this->option('node-package-manager')) {
+            return in_array($option, NodePackageManager::values())
+                ? $option
+                : throw new \InvalidArgumentException("Invalid value [$option] for option [node-package-manager]");
+        }
+
+        return $this->optionalChoice(
+            question: 'Which Node package manager do you use?',
+            choices: NodePackageManager::values(),
+            default: NodePackageManager::NPM,
+        );
+    }
+
+    private function getNodeBuildTool(): string
+    {
+        if ($option = $this->option('node-build-tool')) {
+            return in_array($option, NodeBuildTool::values())
+                ? $option
+                : throw new \InvalidArgumentException("Invalid value [$option] for option [node-build-tool]");
+        }
+
+        return $this->choice(
+            question: 'Which Node build tool do you use?',
+            choices: NodeBuildTool::values(),
+            default: NodeBuildTool::VITE,
+        );
+    }
+
 
     protected function getOptions(): array
     {
@@ -77,65 +147,5 @@ class DockerGenerateCommand extends BaseCommand
                 description: sprintf('Node Build Tool (supported: %s)', join(', ', NodeBuildTool::values())),
             ),
         ];
-    }
-
-    private function getPhpVersion(): string
-    {
-        if ($option = $this->option('php-version')) {
-            return in_array($option, PhpVersion::values())
-                ? $option
-                : throw new \InvalidArgumentException("Invalid value [$option] for option [php-version]");
-        }
-
-        return $this->choice(
-            question: 'PHP version',
-            choices: PhpVersion::values(),
-            default: PhpVersion::v8_2,
-        );
-    }
-
-    public function getArtisanOptimize(): bool
-    {
-        if ($this->option('optimize')) {
-            return true;
-        }
-
-        $choice = $this->choice(
-            question: 'Do you want to run "php artisan optimize" when the image boots?',
-            choices: [self::YES, self::NO],
-            default: self::YES,
-        );
-        return $choice === self::YES;
-    }
-
-    private function getNodePackageManager(): string|false
-    {
-        if ($option = $this->option('node-package-manager')) {
-            return in_array($option, NodePackageManager::values())
-                ? $option
-                : throw new \InvalidArgumentException("Invalid value [$option] for option [node-package-manager]");
-        }
-
-        return $this->optionalChoice(
-            question: 'Which Node package manager do you use?',
-            choices: NodePackageManager::values(),
-            default: NodePackageManager::NPM,
-        );
-    }
-
-
-    private function getNodeBuildTool(): string
-    {
-        if ($option = $this->option('node-build-tool')) {
-            return in_array($option, NodeBuildTool::values())
-                ? $option
-                : throw new \InvalidArgumentException("Invalid value [$option] for option [node-build-tool]");
-        }
-
-        return $this->choice(
-            question: 'Which Node build tool do you use?',
-            choices: NodeBuildTool::values(),
-            default: NodeBuildTool::VITE,
-        );
     }
 }

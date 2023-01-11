@@ -14,9 +14,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/console": "^9.47",
         "illuminate/contracts": "^9.47",
-        "illuminate/support": "^9.47",
         "twig/twig": "^3.0"
     },
     "extra": {
@@ -27,6 +25,9 @@
         }
     },
     "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
         "psr-4": {
             "BlameButton\\LaravelDockerBuilder\\": "src/"
         }
@@ -35,5 +36,8 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7.19"
     }
 }

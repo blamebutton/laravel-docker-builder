@@ -2,7 +2,6 @@
 
 namespace BlameButton\LaravelDockerBuilder\Traits;
 
-use Illuminate\Support\Facades\App;
 use Twig\Environment as TwigEnvironment;
 use Twig\Loader\FilesystemLoader;
 
@@ -15,7 +14,8 @@ trait InteractsWithTwig
         if (!is_null($this->twig)) {
             return $this->twig;
         }
-        $loader = new FilesystemLoader(App::get('laravel-docker-builder.base_path') . '/docker/template');
+        $path = package_path('docker/template');
+        $loader = new FilesystemLoader($path);
         return $this->twig = new TwigEnvironment($loader);
     }
 
