@@ -1,0 +1,18 @@
+{# import node partial, exposed as "node" layer #}
+{% include 'partials/node.dockerfile.twig' %}
+
+# Final Image
+FROM nginx:1-alpine
+
+WORKDIR /app/public
+
+{% if node_build_tool == 'vite' %}
+{# only copy assets if npm build is enabled #}
+COPY --from=node /app/public/build/ /app/public/build/
+{% elseif node_build_tool == 'mix' %}
+COPY --from=node /app/public/css/ /app/public/css/
+COPY --from=node /app/public/js/ /app/public/js/
+COPY --from=node /app/public/fonts/ /app/public/fonts/
+{% endif %}
+
+COPY /public/ /app/public/

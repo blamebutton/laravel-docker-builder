@@ -1,0 +1,28 @@
+{% if node_package_manager %}
+FROM node:lts-alpine AS node
+WORKDIR /app
+
+{# install node dependencies #}
+{% if node_package_manager == 'npm' %}
+{# install dependencies with npm #}
+COPY /package.json /package-lock.json /app/
+RUN npm ci
+{% elseif node_package_manager == 'yarn' %}
+{# install dependencies with yarn #}
+COPY /package.json /yarn.lock /app/
+RUN yarn install
+{% endif %}
+
+COPY /resources/ /app/resources/
+
+{# build assets #}
+{% if node_build_tool == 'vite' %}
+COPY /vite.config.js /app/
+{# build with vite #}
+RUN npm run build
+{% elseif node_build_tool == 'mix' %}
+COPY /webpack.mix.js /app/
+{# build with mix #}
+RUN npm run production
+{% endif %}
+{% endif %}

@@ -3,11 +3,6 @@
     "description": "Production ready Docker files for Laravel",
     "type": "library",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "BlameButton\\LaravelDockerBuilder\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "Bram Ceulemans",
@@ -15,8 +10,30 @@
         }
     ],
     "bin": [
-        "bin/docker-build",
-        "bin/docker-php-entrypoint"
+        "bin/docker-build"
     ],
-    "require": {}
+    "require": {
+        "php": "^8.0",
+        "illuminate/console": "^9.47",
+        "illuminate/contracts": "^9.47",
+        "illuminate/support": "^9.47",
+        "twig/twig": "^3.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BlameButton\\LaravelDockerBuilder\\DockerServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "BlameButton\\LaravelDockerBuilder\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    }
 }

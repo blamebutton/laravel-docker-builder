@@ -1,6 +1,7 @@
 # Composer installation
-FROM php:${PHP_VERSION}-fpm AS composer
+FROM php:{{ php_version }}-fpm AS composer
 WORKDIR /app
+
 ## Install Composer
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions @composer
@@ -8,20 +9,11 @@ RUN install-php-extensions @composer
 COPY / /app
 RUN composer install --optimize-autoloader --no-dev
 
-# Vite.js build
-FROM node:lts-alpine AS node
-WORKDIR /app
-## Cache layer for "npm ci"
-COPY /package.json /package-lock.json /app/
-RUN npm ci
-## Copy JavaScript
-COPY /vite.config.js /app/
-COPY /resources/ /app/resources/
-## Build using Vite.js
-RUN npm run build
+{# import node partial, exposed as "node" layer #}
+{% include 'partials/node.dockerfile.twig' %}
 
 # Final Image
-FROM php:8.2-fpm
+FROM php:{{ php_version }}-fpm
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions bcmath pdo_pgsql redis
@@ -29,12 +21,26 @@ RUN install-php-extensions bcmath pdo_pgsql redis
 WORKDIR /app
 
 COPY / /app
+
+{% if node_build_tool == 'vite' %}
+{# only copy assets if npm build is enabled #}
 COPY --from=node /app/public/build/ /app/public/build/
+{% elseif node_build_tool == 'mix' %}
+COPY --from=node /app/public/css/ /app/public/css/
+COPY --from=node /app/public/js/ /app/public/js/
+COPY --from=node /app/public/fonts/ /app/public/fonts/
+{% endif %}
+
 COPY --from=composer /app/vendor/ /app/vendor/
 
 RUN chown --recursive www-data:www-data /app/storage
 
+{% if artisan_optimize %}
 RUN echo "php artisan optimize --no-ansi && php-fpm" >> /usr/bin/entrypoint.sh && \
     chmod +x /usr/bin/entrypoint.sh
+{% else %}
+RUN echo "php-fpm" >> /usr/bin/entrypoint.sh && \
+    chmod +x /usr/bin/entrypoint.sh
+{% endif %}
 
 CMD ["/usr/bin/entrypoint.sh"]
