@@ -23,6 +23,7 @@ COPY /resources/ /app/resources/
 # Build using Vite.js
 RUN npm run build
 
+# Final Image
 FROM php:8.2-fpm
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
