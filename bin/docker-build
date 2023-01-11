@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+source .env
+
+PACKAGE="$(dirname "${BASH_SOURCE[0]}")/.."
+
+if ! [[ -f "${PWD}/public/index.php" ]]; then
+  echo "Missing [/public/index.php], please run from Laravel base directory.";
+  exit 1
+fi
+
+if ! [[ -f "${PWD}/.dockerignore" ]]; then
+  echo "Missing [/.dockerignore], copying...";
+  cp "${PACKAGE}/docker/.dockerignore" "${PWD}/.dockerignore"
+fi
+
+TAG="${DOCKER_IMAGE_TAG}"
+
+if [[ -z "${TAG}" ]]; then
+  echo "Environment variable [DOCKER_IMAGE_TAG] not found."
+  exit 2
+fi
+
+echo "Building [${TAG}:nginx]"
+docker build \
+  --tag "${TAG}:nginx" \
+  --build-arg "PACKAGE=${PACKAGE}" \
+  --file "${PACKAGE}/docker/nginx.Dockerfile" \
+  "${PWD}"
+
+echo "Building [${TAG}:php]"
+docker build \
+  --tag "${TAG}:php" \
+  --build-arg "PACKAGE=${PACKAGE}" \
+  --file "${PACKAGE}/docker/php.Dockerfile" \
+  "${PWD}"

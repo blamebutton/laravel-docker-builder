@@ -1,0 +1,12 @@
+services:
+  nginx:
+    image: laravel-docker:nginx
+    volumes:
+      - ./nginx/app.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 127.0.0.1:80:80
+  php:
+    image: laravel-docker:php
+    environment:
+      APP_KEY: "base64:Avm4zs1yLfogxHpwBZRZhKZJ0EC6/7IX0FcVSyQQlLU="
+      LOG_CHANNEL: "stderr"

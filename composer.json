@@ -1,0 +1,22 @@
+{
+    "name": "blamebutton/laravel-docker-builder",
+    "description": "Production ready Docker files for Laravel",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "BlameButton\\LaravelDockerBuilder\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bram Ceulemans",
+            "email": "bram@ceulemans.dev"
+        }
+    ],
+    "bin": [
+        "bin/docker-build",
+        "bin/docker-php-entrypoint"
+    ],
+    "require": {}
+}
