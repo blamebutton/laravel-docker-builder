@@ -14,21 +14,27 @@ if ! [[ -f "${PWD}/.dockerignore" ]]; then
   cp "${PACKAGE}/docker/.dockerignore" "${PWD}/.dockerignore"
 fi
 
-TAG="${DOCKER_IMAGE_TAG}"
+NGINX_TAG="${DOCKER_NGINX_TAG}"
+PHP_TAG="${DOCKER_PHP_TAG}"
 
-if [[ -z "${TAG}" ]]; then
-  echo "Environment variable [DOCKER_IMAGE_TAG] not found."
-  exit 2
+if [[ -z "${NGINX_TAG}" ]]; then
+  echo "Environment variable [DOCKER_NGINX_TAG] not found."
+  exit 1
 fi
 
-echo "Building [${TAG}:nginx]"
+if [[ -z "${PHP_TAG}" ]]; then
+  echo "Environment variable [DOCKER_PHP_TAG] not found."
+  exit 1
+fi
+
+echo "Building [${NGINX_TAG}]"
 docker build \
-  --tag "${TAG}:nginx" \
+  --tag "${NGINX_TAG}" \
   --file "${PACKAGE}/docker/nginx.Dockerfile" \
   "${PWD}"
 
-echo "Building [${TAG}:php]"
+echo "Building [${PHP_TAG}]"
 docker build \
-  --tag "${TAG}:php" \
+  --tag "${PHP_TAG}" \
   --file "${PACKAGE}/docker/php.Dockerfile" \
   "${PWD}"
