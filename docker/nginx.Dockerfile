@@ -12,6 +12,7 @@ COPY /resources/ /app/resources/
 # Build using Vite.js
 RUN npm run build
 
+# Final Image
 FROM nginx:1-alpine
 
 WORKDIR /app/public
