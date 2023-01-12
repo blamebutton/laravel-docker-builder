@@ -27,14 +27,4 @@ class DockerServiceProvider extends ServiceProvider
             __DIR__.'/../config/docker-builder.php', 'docker-builder',
         );
     }
-
-    public static function getPackagePath(string $path = null): string
-    {
-        $dir = dirname(__FILE__, 2);
-        if ($path) {
-            return $dir.DIRECTORY_SEPARATOR.$path;
-        }
-
-        return $dir;
-    }
 }
