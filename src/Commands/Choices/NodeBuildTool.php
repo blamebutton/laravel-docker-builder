@@ -15,4 +15,12 @@ class NodeBuildTool
             self::MIX,
         ];
     }
+
+    public static function name(string $value): string
+    {
+        return match ($value) {
+            self::VITE => 'Vite.js',
+            self::MIX => 'Laravel mix',
+        };
+    }
 }

@@ -5,8 +5,14 @@ namespace BlameButton\LaravelDockerBuilder\Commands;
 use BlameButton\LaravelDockerBuilder\Commands\Choices\ArtisanOptimize;
 use BlameButton\LaravelDockerBuilder\Commands\Choices\NodeBuildTool;
 use BlameButton\LaravelDockerBuilder\Commands\Choices\NodePackageManager;
+use BlameButton\LaravelDockerBuilder\Commands\Choices\PhpExtensions;
 use BlameButton\LaravelDockerBuilder\Commands\Choices\PhpVersion;
+use BlameButton\LaravelDockerBuilder\Detector\NodeBuildToolDetector;
+use BlameButton\LaravelDockerBuilder\Detector\NodePackageManagerDetector;
+use BlameButton\LaravelDockerBuilder\Detector\PhpExtensionsDetector;
+use BlameButton\LaravelDockerBuilder\Detector\PhpVersionDetector;
 use BlameButton\LaravelDockerBuilder\Traits\InteractsWithTwig;
+use Illuminate\Support\Collection;
 use Symfony\Component\Console\Input\InputOption;
 
 class DockerGenerateCommand extends BaseCommand
@@ -20,14 +26,27 @@ class DockerGenerateCommand extends BaseCommand
     public function handle(): int
     {
         $phpVersion = $this->getPhpVersion();
+        $phpExtensions = $this->getPhpExtensions($phpVersion);
         $artisanOptimize = $this->getArtisanOptimize();
-
         $nodePackageManager = $this->getNodePackageManager();
         $nodeBuildTool = $nodePackageManager ? $this->getNodeBuildTool() : false;
+
+        if ($this->option('detect')) {
+            $this->info('Detected Configuration');
+        }
+
+        $this->table(['Key', 'Value'], [
+            ['PHP version', "<comment>$phpVersion</comment>"],
+            ['PHP extensions', implode(', ', $phpExtensions)],
+            ['Artisan Optimize', '<comment>'.json_encode($artisanOptimize).'</comment>'],
+            ['Node Package Manager', NodePackageManager::name($nodePackageManager)],
+            ['Node Build Tool', $nodePackageManager ? NodeBuildTool::name($nodeBuildTool) : 'None'],
+        ]);
 
         $dockerfiles = collect([
             'php.dockerfile' => $this->render('php.dockerfile.twig', [
                 'php_version' => $phpVersion,
+                'php_extensions' => $phpExtensions,
                 'artisan_optimize' => $artisanOptimize,
                 'node_package_manager' => $nodePackageManager,
                 'node_build_tool' => $nodeBuildTool,
@@ -65,16 +84,52 @@ class DockerGenerateCommand extends BaseCommand
                 : throw new \InvalidArgumentException("Invalid value [$option] for option [php-version]");
         }
 
+        $detected = app(PhpVersionDetector::class)->detect();
+
+        if ($this->option('detect')) {
+            return $detected;
+        }
+
         return $this->choice(
             question: 'PHP version',
             choices: PhpVersion::values(),
-            default: PhpVersion::v8_2,
+            default: $detected ?: PhpVersion::v8_2,
+        );
+    }
+
+    private function getPhpExtensions(string $phpVersion): array
+    {
+        $supportedExtensions = PhpExtensions::values($phpVersion);
+
+        if ($option = $this->option('php-extensions')) {
+            return Collection::make(explode(',', $option))
+                ->intersect($supportedExtensions)
+                ->toArray();
+        }
+
+        $detected = app(PhpExtensionsDetector::class, ['supportedExtensions' => $supportedExtensions])->detect();
+
+        if ($this->option('detect')) {
+            $detected = explode(',', $detected);
+
+            foreach ($detected as $key => $value) {
+                $detected[$key] = $supportedExtensions[$value];
+            }
+
+            return $detected;
+        }
+
+        return $this->choice(
+            question: 'PHP extensions',
+            choices: $supportedExtensions,
+            default: $detected,
+            multiple: true,
         );
     }
 
     public function getArtisanOptimize(): bool
     {
-        if ($this->option('optimize')) {
+        if ($this->option('optimize') || $this->option('detect')) {
             return true;
         }
 
@@ -95,10 +150,16 @@ class DockerGenerateCommand extends BaseCommand
                 : throw new \InvalidArgumentException("Invalid value [$option] for option [node-package-manager]");
         }
 
+        $detected = app(NodePackageManagerDetector::class)->detect();
+
+        if ($this->option('detect')) {
+            return $detected;
+        }
+
         return $this->optionalChoice(
             question: 'Which Node package manager do you use?',
             choices: NodePackageManager::values(),
-            default: NodePackageManager::NPM,
+            default: $detected ?: NodePackageManager::NPM,
         );
     }
 
@@ -110,10 +171,16 @@ class DockerGenerateCommand extends BaseCommand
                 : throw new \InvalidArgumentException("Invalid value [$option] for option [node-build-tool]");
         }
 
+        $detected = app(NodeBuildToolDetector::class)->detect();
+
+        if ($this->option('detect')) {
+            return $detected;
+        }
+
         return $this->choice(
             question: 'Which Node build tool do you use?',
             choices: NodeBuildTool::values(),
-            default: NodeBuildTool::VITE,
+            default: $detected ?: NodeBuildTool::VITE,
         );
     }
 
@@ -121,10 +188,22 @@ class DockerGenerateCommand extends BaseCommand
     {
         return [
             new InputOption(
+                name: 'detect',
+                shortcut: 'd',
+                mode: InputOption::VALUE_NONE,
+                description: 'Detect project requirements'
+            ),
+            new InputOption(
                 name: 'php-version',
                 shortcut: 'p',
                 mode: InputOption::VALUE_REQUIRED,
                 description: sprintf('PHP version (supported: %s)', implode(', ', PhpVersion::values())),
+            ),
+            new InputOption(
+                name: 'php-extensions',
+                shortcut: 'e',
+                mode: InputOption::VALUE_REQUIRED,
+                description: sprintf('PHP extensions (supported: %s)', implode(', ', PhpExtensions::values())),
             ),
             new InputOption(
                 name: 'optimize',

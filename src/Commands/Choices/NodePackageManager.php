@@ -15,4 +15,12 @@ class NodePackageManager
             self::YARN,
         ];
     }
+
+    public static function name(string $nodePackageManager): string
+    {
+        return match ($nodePackageManager) {
+            self::NPM => 'NPM',
+            self::YARN => 'Yarn',
+        };
+    }
 }

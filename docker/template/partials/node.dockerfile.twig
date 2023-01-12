@@ -1,4 +1,5 @@
 {% if node_package_manager %}
+# built frontend assets with {{ node_package_manager }} and {{ node_build_tool }}
 FROM node:lts-alpine AS node
 WORKDIR /app
 
@@ -11,7 +12,7 @@ RUN npm ci
 {# install dependencies with yarn #}
 COPY /package.json /yarn.lock /app/
 RUN yarn install
-{% endif %}
+{% endif %} {# end of node_package_manager switch #}
 
 COPY /resources/ /app/resources/
 
@@ -19,10 +20,18 @@ COPY /resources/ /app/resources/
 {% if node_build_tool == 'vite' %}
 COPY /vite.config.js /app/
 {# build with vite #}
+{% if node_package_manager == 'npm' %}
 RUN npm run build
+{% elseif node_package_manager == 'yarn' %}
+RUN yarn run build
+{% endif %}
 {% elseif node_build_tool == 'mix' %}
 COPY /webpack.mix.js /app/
 {# build with mix #}
+{% if node_package_manager == 'npm' %}
 RUN npm run production
-{% endif %}
-{% endif %}
+{% elseif node_package_manager == 'yarn' %}
+RUN yarn run production
+{% endif %} {# end of node_package_manager switch #}
+{% endif %} {# end of node_build_tool #}
+{% endif %} {# end of node_package_manager if #}
