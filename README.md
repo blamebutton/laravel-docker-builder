@@ -1,3 +1,5 @@
+![Packagist Version](https://img.shields.io/packagist/v/blamebutton/laravel-docker-builder)
+
 # Laravel Docker Build
 
 ## Installation
