@@ -1,5 +1,5 @@
 # Composer installation
-FROM php:{{ php_version }}-fpm AS composer
+FROM php:{{ php_version }}-fpm-alpine AS composer
 WORKDIR /app
 
 ## install composer dependencies
@@ -12,7 +12,7 @@ RUN composer install --optimize-autoloader --no-dev
 {% include 'partials/node.dockerfile.twig' %}
 
 # build php-fpm image
-FROM php:{{ php_version }}-fpm
+FROM php:{{ php_version }}-fpm-alpine
 WORKDIR /app
 
 # install required extensions
