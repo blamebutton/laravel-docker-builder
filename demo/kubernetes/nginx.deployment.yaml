@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: laravel-docker
+    tier: nginx
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: laravel-docker
+        tier: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: laravel-docker:nginx
+          imagePullPolicy: Never # local development only
+          ports:
+            - containerPort: 80
+              name: nginx-http
+          volumeMounts:
+            - mountPath: /etc/nginx/templates/default.conf.template
+              name: nginx-config-volume
+              subPath: default.conf.template
+      restartPolicy: Always
+      volumes:
+        - name: nginx-config-volume
+          configMap:
+            name: nginx-config
+  selector:
+    matchLabels:
+      app: laravel-docker
+      tier: nginx

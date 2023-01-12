@@ -1,0 +1,12 @@
+resources:
+  - postgres.pvc.yaml
+  - postgres.deployment.yaml
+  - postgres.svc.yaml
+  - redis.deployment.yaml
+  - redis.svc.yaml
+  - php.config-map.yaml
+  - php.deployment.yaml
+  - php.svc.yaml
+  - nginx.config-map.yaml
+  - nginx.deployment.yaml
+  - nginx.svc.yaml

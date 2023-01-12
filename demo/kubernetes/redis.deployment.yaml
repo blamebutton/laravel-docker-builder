@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: laravel-docker
+    tier: redis
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: redis
+      labels:
+        app: laravel-docker
+        tier: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+              name: redis
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: laravel-docker
+      tier: redis

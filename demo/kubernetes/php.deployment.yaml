@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+  labels:
+    app: laravel-docker
+    tier: php
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: php
+      labels:
+        app: laravel-docker
+        tier: php
+    spec:
+      containers:
+        - name: php
+          image: laravel-docker:php
+          imagePullPolicy: Never
+          envFrom:
+            - configMapRef:
+                name: laravel-config
+          ports:
+            - containerPort: 9000
+              name: php-fpm
+      initContainers:
+        - name: migrations
+          image: laravel-docker:php
+          envFrom:
+            - configMapRef:
+                name: laravel-config
+          command:
+            - /bin/bash
+            - -c
+            - php artisan migrate --force
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: laravel-docker
+      tier: php

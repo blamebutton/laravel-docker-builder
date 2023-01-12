@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: laravel-config
+data:
+  APP_NAME: "Laravel Docker"
+  APP_ENV: "production"
+  APP_KEY: "base64:Avm4zs1yLfogxHpwBZRZhKZJ0EC6/7IX0FcVSyQQlLU="
+  APP_DEBUG: "false"
+  APP_URL: "http://localhost"
+  LOG_CHANNEL: "stderr"
+  # Postgres configuration
+  DB_CONNECTION: "pgsql"
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_DATABASE: "laravel-app"
+  DB_USERNAME: "laravel"
+  DB_PASSWORD: "password"
+  # Redis configuration
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  BROADCAST_DRIVER: "redis"
+  CACHE_DRIVER: "redis"
+  QUEUE_CONNECTION: "redis"
+  SESSION_DRIVER: "redis"
+  # Minio configuration
+  FILESYSTEM_DISK: "s3"
+  AWS_ACCESS_KEY_ID: "laravel"
+  AWS_SECRET_ACCESS_KEY: "password"
+  AWS_DEFAULT_REGION: "us-east-1"
+  AWS_BUCKET: "local"
+  AWS_URL: "http://localhost:9000"
+  AWS_ENDPOINT: "http://minio:9000"
+  AWS_USE_PATH_STYLE_ENDPOINT: "true"
+---

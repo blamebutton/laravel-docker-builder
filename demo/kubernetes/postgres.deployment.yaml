@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: laravel-docker
+    tier: postgres
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: postgres
+      labels:
+        app: laravel-docker
+        tier: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_DATABASE
+                  name: laravel-config
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USERNAME
+                  name: laravel-config
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_PASSWORD
+                  name: laravel-config
+          ports:
+            - containerPort: 5432
+              name: postgres
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-persistent-storage
+      restartPolicy: Always
+      volumes:
+        - name: postgres-persistent-storage
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+  selector:
+    matchLabels:
+      app: laravel-docker
+      tier: postgres
