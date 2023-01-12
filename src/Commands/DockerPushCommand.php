@@ -18,6 +18,7 @@ class DockerPushCommand extends BaseDockerCommand
             command: [$command],
             cwd: base_path(),
             env: $this->getEnvironment(),
+            timeout: null,
         );
 
         return $this->runProcess($process);
