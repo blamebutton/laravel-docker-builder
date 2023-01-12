@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+
+source "${SCRIPT_DIR}/common-functions"
+
+check_laravel
+check_dockerfiles
+check_tags
+
+NGINX_TAG="${DOCKER_NGINX_TAG}"
+PHP_TAG="${DOCKER_PHP_TAG}"
+
+docker push "${NGINX_TAG}"
+docker push "${PHP_TAG}"

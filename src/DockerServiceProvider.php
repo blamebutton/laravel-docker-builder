@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder;
 
 use BlameButton\LaravelDockerBuilder\Commands\DockerBuildCommand;
 use BlameButton\LaravelDockerBuilder\Commands\DockerGenerateCommand;
+use BlameButton\LaravelDockerBuilder\Commands\DockerPushCommand;
 use Illuminate\Support\ServiceProvider;
 
 class DockerServiceProvider extends ServiceProvider
@@ -14,6 +15,7 @@ class DockerServiceProvider extends ServiceProvider
             $this->commands([
                 DockerBuildCommand::class,
                 DockerGenerateCommand::class,
+                DockerPushCommand::class,
             ]);
         }
 

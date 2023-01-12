@@ -1,40 +1,20 @@
 #!/usr/bin/env bash
 
-PACKAGE="$(dirname "${BASH_SOURCE[0]}")/.."
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+PACKAGE="${SCRIPT_DIR}/.."
 
-if ! [[ -f "${PWD}/public/index.php" ]]; then
-  echo "Missing [/public/index.php], please run from Laravel base directory.";
-  exit 1
-fi
+source "${SCRIPT_DIR}/common-functions"
 
-if ! [[ -f "${PWD}/.dockerignore" ]]; then
-  echo "Missing [/.dockerignore], copying...";
-  cp "${PACKAGE}/docker/.dockerignore" "${PWD}/.dockerignore"
-fi
-
-if ! [[ -f "$PWD/.docker/nginx.dockerfile" ]]; then
-  echo "Dockerfile [/.docker/nginx.dockerfile] not found."
-  echo "Run: php artisan docker:generate"
-  exit 1
-fi
-
-if ! [[ -f "$PWD/.docker/php.dockerfile" ]]; then
-  echo "Dockerfile [/.docker/php.dockerfile] not found."
-  echo "Run: php artisan docker:generate"
-  exit 1
-fi
+check_laravel
+check_dockerfiles
+check_tags
 
 NGINX_TAG="${DOCKER_NGINX_TAG}"
 PHP_TAG="${DOCKER_PHP_TAG}"
 
-if [[ -z "${NGINX_TAG}" ]]; then
-  echo "Environment variable [DOCKER_NGINX_TAG] not found."
-  exit 1
-fi
-
-if [[ -z "${PHP_TAG}" ]]; then
-  echo "Environment variable [DOCKER_PHP_TAG] not found."
-  exit 1
+if ! [[ -f "${PWD}/.dockerignore" ]]; then
+  echo "Missing [/.dockerignore], copying to [${PWD}/.dockerignore]";
+  cp "${PACKAGE}/docker/.dockerignore" "${PWD}/.dockerignore"
 fi
 
 docker build \
