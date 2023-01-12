@@ -73,7 +73,8 @@ services:
       - "8900:8900"
     volumes:
       - "minio-data:/data/minio"
-    command: "minio server /data/minio --console-address ':8900'"
+    entrypoint: sh
+    command: -c "mkdir -p /data/minio/local && minio server /data/minio --console-address ':8900'"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
       retries: 3
