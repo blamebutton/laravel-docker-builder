@@ -12,6 +12,7 @@ use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodePackageManag
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpExtensionsQuestion;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
+use BlameButton\LaravelDockerBuilder\Objects\Configuration;
 use BlameButton\LaravelDockerBuilder\Traits\InteractsWithTwig;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -26,25 +27,20 @@ class DockerGenerateCommand extends BaseCommand
     public function handle(): int
     {
         try {
-            $phpVersion = app(PhpVersionQuestion::class)->getAnswer($this);
-            $phpExtensions = app(PhpExtensionsQuestion::class)->getAnswer($this, $phpVersion);
-            $artisanOptimize = app(ArtisanOptimizeQuestion::class)->getAnswer($this);
-            $nodePackageManager = app(NodePackageManagerQuestion::class)->getAnswer($this);
-            $nodeBuildTool = $nodePackageManager ? app(NodeBuildToolQuestion::class)->getAnswer($this) : false;
+            $config = new Configuration(
+                phpVersion: $phpVersion = app(PhpVersionQuestion::class)->getAnswer($this),
+                phpExtensions: app(PhpExtensionsQuestion::class)->getAnswer($this, $phpVersion),
+                artisanOptimize: app(ArtisanOptimizeQuestion::class)->getAnswer($this),
+                nodePackageManager: $nodePackageManager = app(NodePackageManagerQuestion::class)->getAnswer($this),
+                nodeBuildTool: $nodePackageManager ? app(NodeBuildToolQuestion::class)->getAnswer($this) : false,
+            );
         } catch (InvalidOptionValueException $exception) {
             $this->error($exception->getMessage());
 
             return self::INVALID;
         }
 
-        $this->info('Configuration:');
-        $this->table(['Key', 'Value'], [
-            ['PHP version', "<comment>$phpVersion</comment>"],
-            ['PHP extensions', implode(', ', $phpExtensions)],
-            ['Artisan Optimize', '<comment>'.json_encode($artisanOptimize).'</comment>'],
-            ['Node Package Manager', NodePackageManager::name($nodePackageManager)],
-            ['Node Build Tool', $nodePackageManager ? NodeBuildTool::name($nodeBuildTool) : 'None'],
-        ]);
+        $this->printConfigurationTable($config);
         $this->newLine();
 
         if (! $this->option('no-interaction') && ! $this->confirm('Does this look correct?', true)) {
@@ -53,38 +49,55 @@ class DockerGenerateCommand extends BaseCommand
             return self::SUCCESS;
         }
 
-        $this->saveDockerfiles([
-            'php_version' => $phpVersion,
-            'php_extensions' => implode(' ', $phpExtensions),
-            'artisan_optimize' => $artisanOptimize,
-            'node_package_manager' => $nodePackageManager,
-            'node_build_tool' => $nodeBuildTool,
-        ]);
+        $this->saveDockerfiles($config);
         $this->newLine();
 
-        $command = array_filter([
-            'php', 'artisan', 'docker:generate',
-            '-n', // --no-interaction
-            '-p '.$phpVersion, // --php-version
-            '-e '.implode(',', $phpExtensions), // --php-extensions
-            $artisanOptimize ? '-o' : null, // --optimize
-            $nodePackageManager ? '-m '.$nodePackageManager : null, // --node-package-manager
-            $nodePackageManager ? '-b '.$nodeBuildTool : null, // --node-build-tool
-        ]);
-
         $this->info('Command to generate above configuration:');
-        $this->comment(sprintf('  %s', implode(' ', $command)));
+        $this->comment(sprintf('  %s', implode(' ', $config->getCommand())));
 
         return self::SUCCESS;
     }
 
-    private function saveDockerfiles(array $context): void
+    public function printConfigurationTable(Configuration $config): void
+    {
+        $this->info('Configuration:');
+
+        $this->table(['Key', 'Value'], [
+            ['PHP version',
+                '<comment>'.$config->getPhpVersion().'</comment>',
+            ],
+            ['PHP extensions',
+                implode(', ', $config->getPhpExtensions()),
+            ],
+            ['Artisan Optimize',
+                '<comment>'.json_encode($config->isArtisanOptimize()).'</comment>',
+            ],
+            ['Node Package Manager',
+                NodePackageManager::name($config->getNodePackageManager()),
+            ],
+            ['Node Build Tool',
+                $config->getNodePackageManager()
+                    ? NodeBuildTool::name($config->getNodeBuildTool())
+                    : 'None',
+            ],
+        ]);
+    }
+
+    private function saveDockerfiles(Configuration $config): void
     {
         if (! is_dir($dir = base_path('.docker'))) {
             mkdir($dir);
         }
 
         $this->info('Saving Dockerfiles:');
+
+        $context = [
+            'php_version' => $config->getPhpVersion(),
+            'php_extensions' => implode(' ', $config->getPhpExtensions()),
+            'artisan_optimize' => $config->isArtisanOptimize(),
+            'node_package_manager' => $config->getNodePackageManager(),
+            'node_build_tool' => $config->getNodeBuildTool(),
+        ];
 
         $dockerfiles = [
             'php.dockerfile' => $this->render('php.dockerfile.twig', $context),
