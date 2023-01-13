@@ -1,4 +1,5 @@
 ![Packagist Version](https://img.shields.io/packagist/v/blamebutton/laravel-docker-builder)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blamebutton/laravel-docker-builder/phpunit.yml)
 
 # Laravel Docker Build
 
