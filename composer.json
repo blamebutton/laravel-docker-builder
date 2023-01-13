@@ -15,7 +15,7 @@
   "require": {
     "php": "^8.0",
     "composer/semver": "^3.3",
-    "illuminate/contracts": "*",
+    "illuminate/contracts": "^9.0 | ^10.0",
     "twig/twig": "^3.0"
   },
   "extra": {
