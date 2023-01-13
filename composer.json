@@ -30,6 +30,11 @@
             "BlameButton\\LaravelDockerBuilder\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "BlameButton\\LaravelDockerBuilder\\Tests\\": "tests/"
+        }
+    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
