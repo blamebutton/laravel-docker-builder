@@ -1,47 +1,50 @@
 {
-    "name": "blamebutton/laravel-docker-builder",
-    "description": "Production ready Docker files for Laravel",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Bram Ceulemans",
-            "email": "bram@ceulemans.dev"
-        }
-    ],
-    "require": {
-        "php": "^8.0",
-        "composer/semver": "^3.3",
-        "illuminate/contracts": "^9.47",
-        "twig/twig": "^3.0"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "BlameButton\\LaravelDockerBuilder\\DockerServiceProvider"
-            ]
-        }
-    },
-    "autoload": {
-        "files": [
-            "src/helpers.php"
-        ],
-        "psr-4": {
-            "BlameButton\\LaravelDockerBuilder\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "BlameButton\\LaravelDockerBuilder\\Tests\\": "tests/"
-        }
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true
-    },
-    "require-dev": {
-        "laravel/pint": "^1.4",
-        "orchestra/testbench": "^7.19"
+  "name": "blamebutton/laravel-docker-builder",
+  "description": "Production ready Docker files for Laravel",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Bram Ceulemans",
+      "email": "bram@ceulemans.dev"
     }
+  ],
+  "scripts": {
+    "coverage": "php -d pcov.enabled=1 -d pcov.directory=src -d pcov.exclude='~vendor~' vendor/bin/phpunit --coverage-text"
+  },
+  "require": {
+    "php": "^8.0",
+    "composer/semver": "^3.3",
+    "illuminate/contracts": "*",
+    "twig/twig": "^3.0"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "BlameButton\\LaravelDockerBuilder\\DockerServiceProvider"
+      ]
+    }
+  },
+  "autoload": {
+    "files": [
+      "src/helpers.php"
+    ],
+    "psr-4": {
+      "BlameButton\\LaravelDockerBuilder\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BlameButton\\LaravelDockerBuilder\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "require-dev": {
+    "laravel/pint": "^1.4",
+    "orchestra/testbench": "^7.19"
+  }
 }
