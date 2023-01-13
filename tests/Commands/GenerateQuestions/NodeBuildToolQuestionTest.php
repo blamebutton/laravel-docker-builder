@@ -13,6 +13,7 @@ use Mockery\MockInterface;
 /**
  * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
  * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
+ *
  * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion
  */
 class NodeBuildToolQuestionTest extends TestCase
@@ -78,5 +79,4 @@ class NodeBuildToolQuestionTest extends TestCase
 
         self::assertEquals($expected, $answer);
     }
-
 }

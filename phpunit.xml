@@ -2,7 +2,6 @@
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-        colors="true"
         forceCoversAnnotation="true"
         beStrictAboutCoversAnnotation="true"
 >
@@ -19,6 +18,7 @@
 
         <report>
             <html outputDirectory=".coverage"/>
+            <text outputFile="php://stdout"/>
         </report>
     </coverage>
 </phpunit>
