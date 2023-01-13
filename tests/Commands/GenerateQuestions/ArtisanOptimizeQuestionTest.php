@@ -4,7 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion;
-use PHPUnit\Framework\TestCase;
+use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 
 class ArtisanOptimizeQuestionTest extends TestCase
 {
