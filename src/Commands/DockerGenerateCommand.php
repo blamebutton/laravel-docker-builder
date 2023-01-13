@@ -11,8 +11,8 @@ use BlameButton\LaravelDockerBuilder\Detector\NodeBuildToolDetector;
 use BlameButton\LaravelDockerBuilder\Detector\NodePackageManagerDetector;
 use BlameButton\LaravelDockerBuilder\Detector\PhpExtensionsDetector;
 use BlameButton\LaravelDockerBuilder\Detector\PhpVersionDetector;
+use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 use BlameButton\LaravelDockerBuilder\Traits\InteractsWithTwig;
-use Illuminate\Support\Collection;
 use Symfony\Component\Console\Input\InputOption;
 
 class DockerGenerateCommand extends BaseCommand
@@ -25,16 +25,19 @@ class DockerGenerateCommand extends BaseCommand
 
     public function handle(): int
     {
-        $phpVersion = $this->getPhpVersion();
-        $phpExtensions = $this->getPhpExtensions($phpVersion);
-        $artisanOptimize = $this->getArtisanOptimize();
-        $nodePackageManager = $this->getNodePackageManager();
-        $nodeBuildTool = $nodePackageManager ? $this->getNodeBuildTool() : false;
+        try {
+            $phpVersion = $this->getPhpVersion();
+            $phpExtensions = $this->getPhpExtensions($phpVersion);
+            $artisanOptimize = $this->getArtisanOptimize();
+            $nodePackageManager = $this->getNodePackageManager();
+            $nodeBuildTool = $nodePackageManager ? $this->getNodeBuildTool() : false;
+        } catch (InvalidOptionValueException $exception) {
+            $this->error($exception->getMessage());
 
-        if ($this->option('detect')) {
-            $this->info('Detected Configuration');
+            return self::INVALID;
         }
 
+        $this->info('Configuration:');
         $this->table(['Key', 'Value'], [
             ['PHP version', "<comment>$phpVersion</comment>"],
             ['PHP extensions', implode(', ', $phpExtensions)],
@@ -42,46 +45,57 @@ class DockerGenerateCommand extends BaseCommand
             ['Node Package Manager', NodePackageManager::name($nodePackageManager)],
             ['Node Build Tool', $nodePackageManager ? NodeBuildTool::name($nodeBuildTool) : 'None'],
         ]);
+        $this->newLine();
 
-        $dockerfiles = collect([
-            'php.dockerfile' => $this->render('php.dockerfile.twig', [
-                'php_version' => $phpVersion,
-                'php_extensions' => $phpExtensions,
-                'artisan_optimize' => $artisanOptimize,
-                'node_package_manager' => $nodePackageManager,
-                'node_build_tool' => $nodeBuildTool,
-            ]),
-            'nginx.dockerfile' => $this->render('nginx.dockerfile.twig', [
-                'node_package_manager' => $nodePackageManager,
-                'node_build_tool' => $nodeBuildTool,
-            ]),
+        if (! $this->option('no-interaction') && ! $this->confirm('Does this look correct?', true)) {
+            $this->comment('Exiting.');
+
+            return self::SUCCESS;
+        }
+
+        $context = [
+            'php_version' => $phpVersion,
+            'php_extensions' => $phpExtensions,
+            'artisan_optimize' => $artisanOptimize,
+            'node_package_manager' => $nodePackageManager,
+            'node_build_tool' => $nodeBuildTool,
+        ];
+
+        $this->saveDockerfiles($context);
+        $this->newLine();
+
+        $command = array_filter([
+            'php',
+            'artisan',
+            'docker:generate',
+            '-n', // --no-interaction
+            '-p '.$phpVersion, // --php-version
+            '-e '.implode(',', $phpExtensions), // --php-extensions
+            $artisanOptimize ? '-o' : null, // --optimize
+            $nodePackageManager ? '-m '.$nodePackageManager : null, // --node-package-manager
+            $nodePackageManager ? '-b '.$nodeBuildTool : null, // --node-build-tool
         ]);
 
-        if (! is_dir($dir = base_path('.docker'))) {
-            mkdir($dir);
-        }
-
-        foreach ($dockerfiles as $file => $content) {
-            // Example: $PWD/.docker/{php,nginx}.dockerfile
-            $dockerfile = sprintf('%s/%s', $dir, $file);
-
-            // Save Dockerfile contents
-            file_put_contents($dockerfile, $content);
-
-            // Output saved Dockerfile location
-            $filename = str($dockerfile)->after(base_path())->trim('/');
-            $this->info(sprintf('Saved: %s', $filename));
-        }
+        $this->info('Command to generate above configuration:');
+        $this->comment(sprintf('  %s', implode(' ', $command)));
 
         return self::SUCCESS;
     }
 
+    /**
+     * Get the PHP version, either by detecting it from the "composer.json",
+     * from the "php-version" option, or asking the user.
+     *
+     * @return string
+     *
+     * @throws InvalidOptionValueException when an unsupported PHP version is passed
+     */
     private function getPhpVersion(): string
     {
         if ($option = $this->option('php-version')) {
             return in_array($option, PhpVersion::values())
                 ? $option
-                : throw new \InvalidArgumentException("Invalid value [$option] for option [php-version]");
+                : throw new InvalidOptionValueException("Invalid value [$option] for option [php-version]");
         }
 
         $detected = app(PhpVersionDetector::class)->detect();
@@ -97,14 +111,31 @@ class DockerGenerateCommand extends BaseCommand
         );
     }
 
+    /**
+     * Get the PHP extensions, either by detecting them from the application's configuration,
+     * from the "php-extensions" option, or asking the user.
+     *
+     * @param  string  $phpVersion
+     * @return array
+     *
+     * @throws InvalidOptionValueException when an unsupported extension is passed
+     */
     private function getPhpExtensions(string $phpVersion): array
     {
         $supportedExtensions = PhpExtensions::values($phpVersion);
 
         if ($option = $this->option('php-extensions')) {
-            return Collection::make(explode(',', $option))
-                ->intersect($supportedExtensions)
-                ->toArray();
+            $extensions = explode(',', $option);
+
+            foreach ($extensions as $extension) {
+                if (in_array($extension, $supportedExtensions)) {
+                    continue;
+                }
+
+                throw new InvalidOptionValueException("Extension [$extension] is not supported.");
+            }
+
+            return array_intersect($extensions, $supportedExtensions);
         }
 
         $detected = app(PhpExtensionsDetector::class, ['supportedExtensions' => $supportedExtensions])->detect();
@@ -142,12 +173,20 @@ class DockerGenerateCommand extends BaseCommand
         return ArtisanOptimize::YES === $choice;
     }
 
+    /**
+     * Get the Node Package Manager, either by detecting it from files present (package-lock.json, yarn.lock),
+     * from the "node-package-manager" option, or asking the user.
+     *
+     * @return string|false
+     *
+     * @throws InvalidOptionValueException
+     */
     private function getNodePackageManager(): string|false
     {
         if ($option = $this->option('node-package-manager')) {
             return in_array($option, NodePackageManager::values())
                 ? $option
-                : throw new \InvalidArgumentException("Invalid value [$option] for option [node-package-manager]");
+                : throw new InvalidOptionValueException("Invalid value [$option] for option [node-package-manager]");
         }
 
         $detected = app(NodePackageManagerDetector::class)->detect();
@@ -163,12 +202,20 @@ class DockerGenerateCommand extends BaseCommand
         );
     }
 
+    /**
+     * Get the Node Build Tool, either by detecting it from files present (vite.config.js, webpack.mix.js),
+     * from the "node-build-tool" option, or asking the user.
+     *
+     * @return string
+     *
+     * @throws InvalidOptionValueException
+     */
     private function getNodeBuildTool(): string
     {
         if ($option = $this->option('node-build-tool')) {
             return in_array($option, NodeBuildTool::values())
                 ? $option
-                : throw new \InvalidArgumentException("Invalid value [$option] for option [node-build-tool]");
+                : throw new InvalidOptionValueException("Invalid value [$option] for option [node-build-tool]");
         }
 
         $detected = app(NodeBuildToolDetector::class)->detect();
@@ -182,6 +229,32 @@ class DockerGenerateCommand extends BaseCommand
             choices: NodeBuildTool::values(),
             default: $detected ?: NodeBuildTool::VITE,
         );
+    }
+
+    private function saveDockerfiles(array $context): void
+    {
+        if (! is_dir($dir = base_path('.docker'))) {
+            mkdir($dir);
+        }
+
+        $this->info('Saving Dockerfiles:');
+
+        $dockerfiles = [
+            'php.dockerfile' => $this->render('php.dockerfile.twig', $context),
+            'nginx.dockerfile' => $this->render('nginx.dockerfile.twig', $context),
+        ];
+
+        foreach ($dockerfiles as $file => $content) {
+            // Example: $PWD/.docker/{php,nginx}.dockerfile
+            $dockerfile = sprintf('%s/%s', $dir, $file);
+
+            // Save Dockerfile contents
+            file_put_contents($dockerfile, $content);
+
+            // Output saved Dockerfile location
+            $filename = str($dockerfile)->after(base_path())->trim('/');
+            $this->comment(sprintf('  Saved: %s', $filename));
+        }
     }
 
     protected function getOptions(): array
