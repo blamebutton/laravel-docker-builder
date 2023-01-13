@@ -14,8 +14,8 @@ class NodeBuildToolQuestionTest extends TestCase
 {
     public function testItThrowsErrorOnInvalidInput(): void
     {
-        $stub = $this->createMock(BaseCommand::class);
-        $stub->expects($this->once())
+        $mock = $this->createMock(BaseCommand::class);
+        $mock->expects($this->once())
             ->method('option')
             ->willReturnMap([
                 ['node-build-tool', 'invalid-value'],
@@ -23,7 +23,7 @@ class NodeBuildToolQuestionTest extends TestCase
 
         $this->expectException(InvalidOptionValueException::class);
 
-        app(NodeBuildToolQuestion::class)->getAnswer($stub);
+        app(NodeBuildToolQuestion::class)->getAnswer($mock);
     }
 
     public function provideDetectedBuildTools(): array
