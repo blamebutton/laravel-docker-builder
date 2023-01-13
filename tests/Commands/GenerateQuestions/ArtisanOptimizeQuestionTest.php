@@ -6,6 +6,11 @@ use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 
+/**
+ * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\ArtisanOptimize
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion
+ */
 class ArtisanOptimizeQuestionTest extends TestCase
 {
     private function provideOptions(): array

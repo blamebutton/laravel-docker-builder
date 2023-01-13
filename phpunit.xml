@@ -3,6 +3,8 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
         colors="true"
+        forceCoversAnnotation="true"
+        beStrictAboutCoversAnnotation="true"
 >
     <testsuites>
         <testsuite name="Unit">
@@ -14,5 +16,9 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+
+        <report>
+            <html outputDirectory=".coverage"/>
+        </report>
     </coverage>
 </phpunit>

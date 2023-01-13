@@ -10,7 +10,7 @@
     }
   ],
   "scripts": {
-    "coverage": "php -d pcov.enabled=1 -d pcov.directory=src -d pcov.exclude='~vendor~' vendor/bin/phpunit --coverage-text"
+    "coverage": "php -d pcov.enabled=1 -d pcov.directory=src -d pcov.exclude='~vendor~' vendor/bin/phpunit"
   },
   "require": {
     "php": "^8.0",
