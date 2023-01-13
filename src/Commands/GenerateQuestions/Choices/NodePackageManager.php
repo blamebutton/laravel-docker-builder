@@ -1,6 +1,6 @@
 <?php
 
-namespace BlameButton\LaravelDockerBuilder\Commands\Choices;
+namespace BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices;
 
 class NodePackageManager
 {

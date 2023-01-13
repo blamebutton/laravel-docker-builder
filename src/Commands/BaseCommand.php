@@ -8,7 +8,7 @@ abstract class BaseCommand extends Command
 {
     private const NONE = 'none';
 
-    protected function optionalChoice(string $question, array $choices, $default = null): string|false
+    public function optionalChoice(string $question, array $choices, $default = null): string|false
     {
         $choice = $this->choice(
             question: $question,

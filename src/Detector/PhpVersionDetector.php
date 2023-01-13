@@ -2,7 +2,7 @@
 
 namespace BlameButton\LaravelDockerBuilder\Detector;
 
-use BlameButton\LaravelDockerBuilder\Commands\Choices\PhpVersion;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
 use Composer\Semver\VersionParser;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;

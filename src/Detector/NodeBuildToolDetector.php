@@ -2,7 +2,7 @@
 
 namespace BlameButton\LaravelDockerBuilder\Detector;
 
-use BlameButton\LaravelDockerBuilder\Commands\Choices\NodeBuildTool;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool;
 
 class NodeBuildToolDetector extends FileDetector
 {

@@ -17,7 +17,7 @@ WORKDIR /app
 
 # install required extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions {{ php_extensions|join(' ') }}
+RUN install-php-extensions {{ php_extensions }}
 
 # copy application source code
 COPY / /app
