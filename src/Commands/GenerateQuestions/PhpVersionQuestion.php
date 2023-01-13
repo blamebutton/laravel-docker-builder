@@ -28,8 +28,8 @@ class PhpVersionQuestion extends BaseQuestion
 
         $detected = app(PhpVersionDetector::class)->detect();
 
-        if ($command->option('detect')) {
-            return $detected;
+        if ($detected && $command->option('detect')) {
+            return (string) $detected;
         }
 
         return $command->choice(

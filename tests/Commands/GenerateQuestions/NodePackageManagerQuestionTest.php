@@ -3,20 +3,20 @@
 namespace BlameButton\LaravelDockerBuilder\Tests\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
-use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool;
-use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion;
-use BlameButton\LaravelDockerBuilder\Detector\NodeBuildToolDetector;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodePackageManagerQuestion;
+use BlameButton\LaravelDockerBuilder\Detector\NodePackageManagerDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
- * @uses   \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
+ * @uses   \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager
  *
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodePackageManagerQuestion
  */
-class NodeBuildToolQuestionTest extends TestCase
+class NodePackageManagerQuestionTest extends TestCase
 {
     public function testItThrowsErrorOnInvalidInput(): void
     {
@@ -24,19 +24,19 @@ class NodeBuildToolQuestionTest extends TestCase
         $mock->expects($this->once())
             ->method('option')
             ->willReturnMap([
-                ['node-build-tool', 'invalid-value'],
+                ['node-package-manager', 'invalid-value'],
             ]);
 
         $this->expectException(InvalidOptionValueException::class);
 
-        app(NodeBuildToolQuestion::class)->getAnswer($mock);
+        app(NodePackageManagerQuestion::class)->getAnswer($mock);
     }
 
     private function provideOptions(): array
     {
         return [
-            'vite' => [NodeBuildTool::VITE, 'vite'],
-            'mix' => [NodeBuildTool::MIX, 'mix'],
+            'npm' => [NodePackageManager::NPM, 'npm'],
+            'yarn' => [NodePackageManager::YARN, 'yarn'],
         ];
     }
 
@@ -47,36 +47,36 @@ class NodeBuildToolQuestionTest extends TestCase
         $mock->expects($this->once())
             ->method('option')
             ->willReturnMap([
-                ['node-build-tool', $input],
+                ['node-package-manager', $input],
             ]);
 
-        $answer = app(NodeBuildToolQuestion::class)->getAnswer($mock);
+        $answer = app(NodePackageManagerQuestion::class)->getAnswer($mock);
     }
 
-    public function provideDetectedBuildTools(): array
+    public function provideDetectedPackageManagers(): array
     {
         return [
-            'vite' => [NodeBuildTool::VITE, NodeBuildTool::VITE],
-            'mix' => [NodeBuildTool::MIX, NodeBuildTool::MIX],
+            'npm' => [NodePackageManager::NPM, NodePackageManager::NPM],
+            'yarn' => [NodePackageManager::YARN, NodePackageManager::YARN],
         ];
     }
 
-    /** @dataProvider provideDetectedBuildTools */
-    public function testItDetectsBuildTools($expected, $detected): void
+    /** @dataProvider provideDetectedPackageManagers */
+    public function testItDetectsPackageManagers($expected, $detected): void
     {
         $mock = $this->createMock(BaseCommand::class);
         $mock->expects($this->exactly(2))
             ->method('option')
             ->willReturnMap([
-                ['node-build-tool', null],
+                ['node-package-manager', null],
                 ['detect', true],
             ]);
 
-        $this->mock(NodeBuildToolDetector::class, function (MockInterface $mock) use ($detected) {
+        $this->mock(NodePackageManagerDetector::class, function (MockInterface $mock) use ($detected) {
             $mock->shouldReceive('detect')->once()->andReturn($detected);
         });
 
-        $answer = app(NodeBuildToolQuestion::class)->getAnswer($mock);
+        $answer = app(NodePackageManagerQuestion::class)->getAnswer($mock);
 
         self::assertEquals($expected, $answer);
     }
@@ -84,8 +84,8 @@ class NodeBuildToolQuestionTest extends TestCase
     public function provideQuestionInput(): array
     {
         return [
-            'vite' => ['vite', 'vite'],
-            'mix' => ['mix', 'mix'],
+            'npm' => ['npm', 'npm'],
+            'yarn' => ['yarn', 'yarn'],
         ];
     }
 
@@ -96,18 +96,18 @@ class NodeBuildToolQuestionTest extends TestCase
         $mock->expects($this->exactly(2))
             ->method('option')
             ->willReturnMap([
-                ['node-build-tool', null],
+                ['node-package-manager', null],
                 ['detect', false],
             ]);
         $mock->expects($this->once())
-            ->method('choice')
+            ->method('optionalChoice')
             ->willReturn($input);
 
-        $this->mock(NodeBuildToolDetector::class, function (MockInterface $mock) {
+        $this->mock(NodePackageManagerDetector::class, function (MockInterface $mock) {
             $mock->shouldReceive('detect')->once()->andReturn(false);
         });
 
-        $answer = app(NodeBuildToolQuestion::class)->getAnswer($mock);
+        $answer = app(NodePackageManagerQuestion::class)->getAnswer($mock);
 
         self::assertEquals($expected, $answer);
     }

@@ -7,6 +7,9 @@ use Illuminate\Support\Collection;
 
 class PhpExtensionsDetector implements DetectorContract
 {
+    /**
+     * @param  string[]  $supportedExtensions
+     */
     public function __construct(private array $supportedExtensions)
     {
     }
@@ -32,11 +35,17 @@ class PhpExtensionsDetector implements DetectorContract
             ->join(',');
     }
 
+    /**
+     * @return string[]
+     */
     private function getDefaultExtensions(): array
     {
         return ['bcmath'];
     }
 
+    /**
+     * @return string[]
+     */
     private function getCacheExtensions(): array
     {
         $store = config('cache.default');
@@ -50,6 +59,9 @@ class PhpExtensionsDetector implements DetectorContract
         });
     }
 
+    /**
+     * @return string[]
+     */
     public function getDatabaseExtensions(): array
     {
         $connection = config('database.default');
@@ -63,6 +75,9 @@ class PhpExtensionsDetector implements DetectorContract
         });
     }
 
+    /**
+     * @return string[]
+     */
     public function getBroadcastingExtensions(): array
     {
         $connection = config('broadcasting.default');
@@ -75,7 +90,7 @@ class PhpExtensionsDetector implements DetectorContract
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getQueueExtensions(): array
     {
@@ -89,7 +104,7 @@ class PhpExtensionsDetector implements DetectorContract
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getSessionExtensions(): array
     {

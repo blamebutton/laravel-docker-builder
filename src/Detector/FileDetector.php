@@ -15,5 +15,8 @@ abstract class FileDetector implements DetectorContract
         return false;
     }
 
+    /**
+     * @return array<string, string>
+     */
     abstract protected function getPathMapping(): array;
 }

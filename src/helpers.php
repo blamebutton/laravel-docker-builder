@@ -5,7 +5,7 @@ if (! function_exists('package_path')) {
     {
         $dir = dirname(__FILE__, 2);
 
-        if ($path = str($path)->ltrim(DIRECTORY_SEPARATOR)) {
+        if (! is_null($path) && $path = ltrim($path, DIRECTORY_SEPARATOR)) {
             return $dir.DIRECTORY_SEPARATOR.$path;
         }
 
