@@ -17,15 +17,15 @@ class ConfigurationTest extends TestCase
         return [
             [
                 'php artisan docker:generate -n -p 8.2 -e bcmath,pdo_mysql -o -m npm -b vite',
-                new Configuration('8.2', ['bcmath', 'pdo_mysql'], true, 'npm', 'vite')
+                new Configuration('8.2', ['bcmath', 'pdo_mysql'], true, 'npm', 'vite'),
             ],
             [
                 'php artisan docker:generate -n -p 8.1 -e bcmath,pdo_pgsql,redis -o -m yarn -b vite',
-                new Configuration('8.1', ['bcmath', 'pdo_pgsql', 'redis'], true, 'yarn', 'vite')
+                new Configuration('8.1', ['bcmath', 'pdo_pgsql', 'redis'], true, 'yarn', 'vite'),
             ],
             [
                 'php artisan docker:generate -n -p 8.0 -e bcmath,pdo_pgsql,apcu -m yarn -b mix',
-                new Configuration('8.0', ['bcmath', 'pdo_pgsql', 'apcu'], false, 'yarn', 'mix')
+                new Configuration('8.0', ['bcmath', 'pdo_pgsql', 'apcu'], false, 'yarn', 'mix'),
             ],
         ];
     }

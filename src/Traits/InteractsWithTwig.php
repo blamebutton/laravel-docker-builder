@@ -2,16 +2,17 @@
 
 namespace BlameButton\LaravelDockerBuilder\Traits;
 
-use RuntimeException;
 use Twig\Environment as TwigEnvironment;
-use Twig\Error\Error;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Twig\Loader\FilesystemLoader;
 
 trait InteractsWithTwig
 {
     private TwigEnvironment|null $twig = null;
 
-    private function twig(): TwigEnvironment
+    public function twig(): TwigEnvironment
     {
         if (! is_null($this->twig)) {
             return $this->twig;
@@ -29,13 +30,13 @@ trait InteractsWithTwig
      * @param  string  $name
      * @param  array<string, mixed>  $context
      * @return string
+     *
+     * @throws LoaderError  when the template cannot be found
+     * @throws SyntaxError  when an error occurred during compilation
+     * @throws RuntimeError when an error occurred during rendering
      */
-    private function render(string $name, array $context): string
+    public function render(string $name, array $context): string
     {
-        try {
-            return $this->twig()->render($name, $context);
-        } catch (Error $error) {
-            throw new RuntimeException($error->getMessage());
-        }
+        return $this->twig()->render($name, $context);
     }
 }
