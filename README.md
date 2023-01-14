@@ -5,7 +5,7 @@
 
 ## Features
 
-* Build Docker images through the Artisan CLI
+* Build Docker images using the Artisan CLI
 * Detect PHP version and extensions
 * Bundle assets with Vite.js or Laravel Mix
 * Separate NGINX and PHP-FPM images
