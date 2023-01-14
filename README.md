@@ -17,23 +17,6 @@
 composer require --dev blamebutton/laravel-docker-builder
 ```
 
-## Configuration
-
-### Option 1: Config File
-
-```shell
-php artisan vendor:publish --provider="BlameButton\LaravelDockerBuilder\DockerServiceProvider"
-```
-
-### Option 2: `.env`
-
-By default, the configuration file reads the following environment variables to determine the Docker image tags.
-
-```shell
-DOCKER_NGINX_TAG=laravel-app:nginx
-DOCKER_PHP_TAG=laravel-app:php
-```
-
 ## Usage
 
 ### Detect Configuration
@@ -69,3 +52,20 @@ See all available options, and their supported values, by running `php artisan d
 * `-o, --optimize` - Run `php artisan optimize` on container start
 * `-m, --node-package-manager` - Install Node dependencies using NPM or Yarn
 * `-b, --node-build-tool` - Run Vite.js or Laravel Mix build step
+
+## Configuration
+
+### Option 1: Config File
+
+```shell
+php artisan vendor:publish --provider="BlameButton\LaravelDockerBuilder\DockerServiceProvider"
+```
+
+### Option 2: `.env`
+
+By default, the configuration file reads the following environment variables to determine the Docker image tags.
+
+```shell
+DOCKER_NGINX_TAG=laravel-app:nginx
+DOCKER_PHP_TAG=laravel-app:php
+```
