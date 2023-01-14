@@ -20,7 +20,7 @@ class NodeBuildTool
     {
         return match ($value) {
             self::VITE => 'Vite.js',
-            self::MIX => 'Laravel mix',
+            self::MIX => 'Laravel Mix',
         };
     }
 }

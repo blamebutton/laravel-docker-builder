@@ -28,6 +28,16 @@ class InteractsWithTwigTest extends TestCase
         self::assertEquals([package_path('docker/template')], $loader->getPaths());
     }
 
+    public function testItCachesTwigInstances(): void
+    {
+        /** @var InteractsWithTwig $class */
+        $class = $this->getObjectForTrait(InteractsWithTwig::class);
+
+        $twig = $class->twig();
+
+        self::assertSame($class->twig(), $twig);
+    }
+
     public function testItThrowsErrorOnMissingTemplates(): void
     {
         /** @var InteractsWithTwig $class */

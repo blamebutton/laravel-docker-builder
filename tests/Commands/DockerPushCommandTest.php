@@ -7,7 +7,7 @@ use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Symfony\Component\Process\Process;
 
 /**
- * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
+ * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider::boot()
  * @uses   package_path()
  *
  * @covers \BlameButton\LaravelDockerBuilder\Commands\DockerPushCommand
