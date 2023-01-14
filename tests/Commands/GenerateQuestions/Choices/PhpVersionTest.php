@@ -2,7 +2,6 @@
 
 namespace BlameButton\LaravelDockerBuilder\Tests\Commands\GenerateQuestions\Choices;
 
-use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 

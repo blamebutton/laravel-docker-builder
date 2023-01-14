@@ -18,6 +18,10 @@
     "illuminate/contracts": "^9.0 | ^10.0",
     "twig/twig": "^3.0"
   },
+  "require-dev": {
+    "laravel/pint": "^1.4",
+    "orchestra/testbench": "^7.19"
+  },
   "extra": {
     "laravel": {
       "providers": [
@@ -42,9 +46,5 @@
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true
-  },
-  "require-dev": {
-    "laravel/pint": "^1.4",
-    "orchestra/testbench": "^7.19"
   }
 }
