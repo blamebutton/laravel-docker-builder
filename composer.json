@@ -1,16 +1,20 @@
 {
   "name": "blamebutton/laravel-docker-builder",
   "description": "Production ready Docker files for Laravel",
-  "type": "library",
   "license": "MIT",
+  "type": "library",
+  "keywords": ["laravel", "docker", "image","generate", "kubernetes"],
   "authors": [
     {
       "name": "Bram Ceulemans",
-      "email": "bram@ceulemans.dev"
+      "email": "bram@ceulemans.dev",
+      "homepage": "https://github.com/bram-pkg"
     }
   ],
-  "scripts": {
-    "coverage": "php -d pcov.enabled=1 -d pcov.directory=src -d pcov.exclude='~vendor~' vendor/bin/phpunit"
+  "homepage": "https://github.com/blamebutton/laravel-docker-builder",
+  "support": {
+    "issues": "https://github.com/blamebutton/laravel-docker-builder/issues",
+    "source": "https://github.com/blamebutton/laravel-docker-builder"
   },
   "require": {
     "php": "^8.0",
@@ -22,20 +26,13 @@
     "laravel/pint": "^1.4",
     "orchestra/testbench": "^7.19"
   },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "BlameButton\\LaravelDockerBuilder\\DockerServiceProvider"
-      ]
-    }
-  },
   "autoload": {
-    "files": [
-      "src/helpers.php"
-    ],
     "psr-4": {
       "BlameButton\\LaravelDockerBuilder\\": "src/"
-    }
+    },
+    "files": [
+      "src/helpers.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
@@ -46,5 +43,15 @@
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "BlameButton\\LaravelDockerBuilder\\DockerServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "coverage": "php -d pcov.enabled=1 -d pcov.directory=src -d pcov.exclude='~vendor~' vendor/bin/phpunit"
   }
 }
