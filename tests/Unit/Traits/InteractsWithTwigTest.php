@@ -1,6 +1,6 @@
 <?php
 
-namespace BlameButton\LaravelDockerBuilder\Tests\Unit;
+namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Traits;
 
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use BlameButton\LaravelDockerBuilder\Traits\InteractsWithTwig;

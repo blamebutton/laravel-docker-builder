@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Feature\Commands;
 
 use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
+use Illuminate\Contracts\Console\Kernel;
 use Mockery\MockInterface;
 
 /**
@@ -111,5 +112,39 @@ class DockerGenerateCommandTest extends TestCase
         ]);
         $command->expectsOutput('Command to generate above configuration:');
         $command->expectsOutput('  php artisan docker:generate -n -p 8.2 -e bcmath,redis -o -a -m npm -b vite');
+    }
+
+    public function provideInvalidOptions(): array
+    {
+        return [
+            'php version' => [
+                "Invalid value [unsupported] for option [php-version]",
+                'docker:generate -n -p unsupported -e bcmath -o -a -m npm -b vite',
+            ],
+            'php extensions' => [
+                "Extension [unsupported] is not supported.",
+                'docker:generate -n -p 8.2 -e bcmath,unsupported -o -a -m npm -b vite',
+            ],
+            'node package manager' => [
+                "Invalid value [unsupported] for option [node-package-manager]",
+                'docker:generate -n -p 8.2 -e bcmath -o -a -m unsupported -b vite',
+            ],
+            'node build tool' => [
+                "Invalid value [unsupported] for option [node-build-tool]",
+                'docker:generate -n -p 8.2 -e bcmath -o -a -m npm -b unsupported',
+            ],
+        ];
+    }
+
+    /** @dataProvider provideInvalidOptions */
+    public function testItThrowsExceptions(string $expected, string $command): void
+    {
+        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
+            $mock->shouldReceive('get')->withAnyArgs()->andReturn(['bcmath']);
+        });
+
+        $command = $this->artisan($command);
+        $command->expectsOutput($expected);
+        $command->assertFailed();
     }
 }
