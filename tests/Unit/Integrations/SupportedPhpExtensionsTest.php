@@ -24,13 +24,13 @@ class SupportedPhpExtensionsTest extends TestCase
                 ->passthru();
             $mock->shouldReceive('fetch')
                 ->once()
-                ->andReturn(<<<'RES'
-                    apcu 8.1 8.2
-                    pdo_mysql 8.2
-                    pdo_pgsql 8.0 8.1
-                    memcached 8.0
-                    redis 8.1
-                RES);
+                ->andReturn([
+                    'apcu 8.1 8.2',
+                    'pdo_mysql 8.2',
+                    'pdo_pgsql 8.0 8.1',
+                    'memcached 8.0',
+                    'redis 8.1',
+                ]);
         });
     }
 
@@ -44,10 +44,10 @@ class SupportedPhpExtensionsTest extends TestCase
     }
 
     /** @dataProvider providePhpVersions */
-    public function testItFiltersVersions(): void
+    public function testItFiltersVersions($expected, $version): void
     {
-        $supported = app(SupportedPhpExtensions::class)->get('8.2');
+        $supported = app(SupportedPhpExtensions::class)->get($version);
 
-        self::assertEquals(['apcu', 'pdo_mysql'], $supported);
+        self::assertEquals($expected, $supported);
     }
 }

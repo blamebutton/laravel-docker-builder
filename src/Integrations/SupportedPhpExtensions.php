@@ -17,19 +17,19 @@ class SupportedPhpExtensions
         try {
             $contents = $this->fetch();
 
-            return $this->cache = str($contents)
-                ->explode("\n")
+            return $this->cache = collect($contents)
                 ->filter(fn (string $extension): bool => is_null($phpVersion) || str($extension)->contains($phpVersion))
                 ->map(fn (string $extension): string => str($extension)->trim()->before(' '))
                 ->filter()
+                ->values()
                 ->toArray();
         } catch (\ErrorException) {
             return [];
         }
     }
 
-    protected function fetch(): string|false
+    protected function fetch(): array|false
     {
-        return file_get_contents(self::URL);
+        return file(self::URL);
     }
 }
