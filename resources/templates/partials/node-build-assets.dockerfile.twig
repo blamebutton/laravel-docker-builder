@@ -14,7 +14,7 @@ COPY /package.json /yarn.lock /app/
 RUN yarn install
 {% endif %} {# end of node_package_manager switch #}
 
-COPY /resources /app/resources/
+COPY /resources/ /app/resources/
 
 {# build assets #}
 {% if node_build_tool == 'vite' %}
