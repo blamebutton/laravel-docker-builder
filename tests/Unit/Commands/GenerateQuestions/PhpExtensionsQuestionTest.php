@@ -4,7 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Commands\GenerateQuestions
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpExtensionsQuestion;
-use BlameButton\LaravelDockerBuilder\Detector\PhpExtensionsDetector;
+use BlameButton\LaravelDockerBuilder\Detectors\PhpExtensionsDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
@@ -88,6 +88,7 @@ class PhpExtensionsQuestionTest extends TestCase
 
         self::assertEquals(['bcmath', 'pdo_mysql'], $answer);
     }
+
     public function testItAsksForInput(): void
     {
         $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {

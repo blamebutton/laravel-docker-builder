@@ -4,7 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager;
-use BlameButton\LaravelDockerBuilder\Detector\NodePackageManagerDetector;
+use BlameButton\LaravelDockerBuilder\Detectors\NodePackageManagerDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 
 class NodePackageManagerQuestion extends BaseQuestion

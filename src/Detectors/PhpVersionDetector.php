@@ -1,6 +1,6 @@
 <?php
 
-namespace BlameButton\LaravelDockerBuilder\Detector;
+namespace BlameButton\LaravelDockerBuilder\Detectors;
 
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
 use Composer\Semver\VersionParser;

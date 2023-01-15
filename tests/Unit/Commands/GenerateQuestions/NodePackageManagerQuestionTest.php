@@ -5,7 +5,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Commands\GenerateQuestions
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodePackageManagerQuestion;
-use BlameButton\LaravelDockerBuilder\Detector\NodePackageManagerDetector;
+use BlameButton\LaravelDockerBuilder\Detectors\NodePackageManagerDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;

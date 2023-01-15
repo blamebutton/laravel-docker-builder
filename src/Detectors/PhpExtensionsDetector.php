@@ -1,6 +1,6 @@
 <?php
 
-namespace BlameButton\LaravelDockerBuilder\Detector;
+namespace BlameButton\LaravelDockerBuilder\Detectors;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;

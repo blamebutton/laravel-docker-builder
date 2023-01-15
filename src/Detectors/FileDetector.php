@@ -1,6 +1,6 @@
 <?php
 
-namespace BlameButton\LaravelDockerBuilder\Detector;
+namespace BlameButton\LaravelDockerBuilder\Detectors;
 
 abstract class FileDetector implements DetectorContract
 {

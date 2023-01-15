@@ -8,11 +8,11 @@ use Mockery\MockInterface;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
- * @uses   \BlameButton\LaravelDockerBuilder\Detector\FileDetector
- * @uses   \BlameButton\LaravelDockerBuilder\Detector\PhpVersionDetector
- * @uses   \BlameButton\LaravelDockerBuilder\Detector\PhpExtensionsDetector
- * @uses   \BlameButton\LaravelDockerBuilder\Detector\NodePackageManagerDetector
- * @uses   \BlameButton\LaravelDockerBuilder\Detector\NodeBuildToolDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detectors\FileDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detectors\PhpVersionDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detectors\PhpExtensionsDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detectors\NodePackageManagerDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detectors\NodeBuildToolDetector
  * @uses   package_path()
  * @uses \BlameButton\LaravelDockerBuilder\Commands\BaseCommand::optionalChoice
  * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
