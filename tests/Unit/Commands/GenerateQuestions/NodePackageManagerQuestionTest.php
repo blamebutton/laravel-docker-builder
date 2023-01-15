@@ -1,6 +1,6 @@
 <?php
 
-namespace BlameButton\LaravelDockerBuilder\Tests\Commands\GenerateQuestions;
+namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager;

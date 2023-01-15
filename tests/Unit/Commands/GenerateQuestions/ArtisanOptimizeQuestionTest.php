@@ -1,6 +1,6 @@
 <?php
 
-namespace BlameButton\LaravelDockerBuilder\Tests\Commands\GenerateQuestions;
+namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion;
@@ -18,6 +18,7 @@ class ArtisanOptimizeQuestionTest extends TestCase
         return [
             'it returns true when detect is true' => [true, null, true],
             'it returns true when optimize is true' => [true, true, null],
+            'it returns false when optimize is false and detect is true' => [false, false, true],
             'it returns true when optimize and detect are true' => [true, true, true],
         ];
     }
@@ -26,7 +27,7 @@ class ArtisanOptimizeQuestionTest extends TestCase
     public function testItHandlesOptionsCorrectly($expected, $optimize, $detect): void
     {
         $mock = $this->createMock(BaseCommand::class);
-        $mock->expects($this->atMost(2))
+        $mock->expects($this->atMost(3))
             ->method('option')
             ->willReturnMap([
                 ['optimize', $optimize],
@@ -53,7 +54,7 @@ class ArtisanOptimizeQuestionTest extends TestCase
     {
         $stub = $this->createStub(BaseCommand::class);
         $stub->method('option')
-            ->willReturn(false);
+            ->willReturn(null);
         $stub->method('confirm')
             ->willReturn($input);
 

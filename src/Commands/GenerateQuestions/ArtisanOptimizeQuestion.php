@@ -8,6 +8,10 @@ class ArtisanOptimizeQuestion extends BaseQuestion
 {
     public function getAnswer(BaseCommand $command): bool
     {
+        if ($command->option('optimize') === false) {
+            return false;
+        }
+
         if ($command->option('optimize') || $command->option('detect')) {
             return true;
         }

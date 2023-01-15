@@ -1,6 +1,6 @@
 <?php
 
-namespace BlameButton\LaravelDockerBuilder\Tests\Objects;
+namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Objects;
 
 use BlameButton\LaravelDockerBuilder\Objects\Configuration;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;

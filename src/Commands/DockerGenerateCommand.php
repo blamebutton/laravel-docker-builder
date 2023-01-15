@@ -77,10 +77,10 @@ class DockerGenerateCommand extends BaseCommand
             ['Alpine images',
                 '<comment>'.json_encode($config->isAlpine()).'</comment>',
             ],
-            ['Node Package Manager',
+            ['Node package manager',
                 NodePackageManager::name($config->getNodePackageManager()),
             ],
-            ['Node Build Tool',
+            ['Node build tool',
                 $config->getNodePackageManager()
                     ? NodeBuildTool::name($config->getNodeBuildTool())
                     : 'None',
@@ -161,7 +161,6 @@ class DockerGenerateCommand extends BaseCommand
                 shortcut: 'a',
                 mode: InputOption::VALUE_NEGATABLE,
                 description: 'Use Alpine Linux based images',
-                default: true,
             ),
             new InputOption(
                 name: 'node-package-manager',
