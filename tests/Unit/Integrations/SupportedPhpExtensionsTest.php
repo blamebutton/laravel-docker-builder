@@ -7,7 +7,7 @@ use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;
 
 /**
- * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
+ * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
  *
  * @covers \BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions
  */
@@ -50,7 +50,7 @@ class SupportedPhpExtensionsTest extends TestCase
 
     public function testItReturnsEmptyArrayOnError(): void
     {
-        $this->mock(SupportedPhpExtensions::class, function(MockInterface $mock) {
+        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
             $mock->shouldAllowMockingProtectedMethods();
             $mock->shouldReceive('get')->once()->passthru();
             $mock->shouldReceive('fetch')->once()->withNoArgs()->andReturn(false);
@@ -59,5 +59,17 @@ class SupportedPhpExtensionsTest extends TestCase
         $supported = app(SupportedPhpExtensions::class)->get('8.2');
 
         self::assertEquals([], $supported);
+    }
+
+    public function testItCachesResponse(): void
+    {
+        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
+            $mock->shouldAllowMockingProtectedMethods();
+            $mock->shouldReceive('get')->twice()->passthru();
+            $mock->shouldReceive('fetch')->once()->andReturn();
+        });
+
+        app(SupportedPhpExtensions::class)->get();
+        app(SupportedPhpExtensions::class)->get();
     }
 }
