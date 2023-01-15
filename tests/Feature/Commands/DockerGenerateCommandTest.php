@@ -27,7 +27,6 @@ use Mockery\MockInterface;
  * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
  * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion
  * @covers \BlameButton\LaravelDockerBuilder\Objects\Configuration
- *
  * @covers \BlameButton\LaravelDockerBuilder\Commands\DockerGenerateCommand
  */
 class DockerGenerateCommandTest extends TestCase
@@ -39,13 +38,13 @@ class DockerGenerateCommandTest extends TestCase
                 [
                     "FROM php:8.2-fpm-alpine AS composer\n",
                     "FROM node:lts-alpine AS node\n",
-                    "COPY /package.json /package-lock.json /app/",
+                    'COPY /package.json /package-lock.json /app/',
                     "COPY /vite.config.js /app/\n",
                     "RUN npm run build\n",
                     "RUN install-php-extensions bcmath pdo_pgsql redis\n",
                     "COPY --from=node /app/public/build/ /app/public/build/\n",
-                    "RUN echo \"php artisan optimize --no-ansi && php-fpm\" >> /usr/bin/entrypoint.sh",
-                    "CMD [\"/usr/bin/entrypoint.sh\"]\n"
+                    'RUN echo "php artisan optimize --no-ansi && php-fpm" >> /usr/bin/entrypoint.sh',
+                    "CMD [\"/usr/bin/entrypoint.sh\"]\n",
                 ],
                 'docker:generate -n -p 8.2 -e bcmath,pdo_pgsql,redis -o -a -m npm -b vite',
             ],
@@ -53,15 +52,15 @@ class DockerGenerateCommandTest extends TestCase
                 [
                     "FROM php:8.1-fpm AS composer\n",
                     "FROM node:lts AS node\n",
-                    "COPY /package.json /yarn.lock /app/",
+                    'COPY /package.json /yarn.lock /app/',
                     "COPY /webpack.mix.js /app/\n",
                     "RUN yarn run production\n",
                     "RUN install-php-extensions bcmath pdo_mysql apcu\n",
                     "COPY --from=node /app/public/css/ /app/public/css/\n",
                     "COPY --from=node /app/public/js/ /app/public/js/\n",
                     "COPY --from=node /app/public/fonts/ /app/public/fonts/\n",
-                    "RUN echo \"php-fpm\" >> /usr/bin/entrypoint.sh",
-                    "CMD [\"/usr/bin/entrypoint.sh\"]\n"
+                    'RUN echo "php-fpm" >> /usr/bin/entrypoint.sh',
+                    "CMD [\"/usr/bin/entrypoint.sh\"]\n",
                 ],
                 'docker:generate -n -p 8.1 -e bcmath,pdo_mysql,apcu --no-optimize --no-alpine -m yarn -b mix',
             ],
@@ -72,7 +71,7 @@ class DockerGenerateCommandTest extends TestCase
     public function testItGeneratesConfigurations(array $expected, string $command): void
     {
         $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
-            $mock->shouldReceive('fetch')->withAnyArgs()->andReturn([
+            $mock->shouldReceive('get')->withAnyArgs()->andReturn([
                 'bcmath', 'pdo_mysql', 'pdo_pgsql', 'redis', 'apcu',
             ]);
         });
@@ -89,8 +88,8 @@ class DockerGenerateCommandTest extends TestCase
     public function testItAsksQuestions(): void
     {
         $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
-            $mock->shouldReceive('fetch')->with('8.2')->once()->andReturn(['bcmath', 'redis']);
-            $mock->shouldReceive('fetch')->with(null)->andReturn(['not the same as with 8.2']);
+            $mock->shouldReceive('get')->with('8.2')->once()->andReturn(['bcmath', 'redis']);
+            $mock->shouldReceive('get')->with(null)->andReturn(['not the same as with 8.2']);
         });
 
         $command = $this->artisan('docker:generate');

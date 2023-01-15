@@ -17,7 +17,7 @@ class PhpExtensionsTest extends TestCase
     public function testItCallsSupportedPhpExtensions(): void
     {
         $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
-            $mock->shouldReceive('fetch')->once()->andReturn([
+            $mock->shouldReceive('get')->once()->andReturn([
                 'bcmath',
                 'pdo_mysql',
                 'redis',

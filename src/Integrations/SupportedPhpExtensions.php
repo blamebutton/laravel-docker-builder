@@ -8,14 +8,14 @@ class SupportedPhpExtensions
 
     private array|null $cache = null;
 
-    public function fetch(string $phpVersion = null): array
+    public function get(string $phpVersion = null): array
     {
         if (! is_null($this->cache)) {
             return $this->cache;
         }
 
         try {
-            $contents = file_get_contents(self::URL);
+            $contents = $this->fetch();
 
             return $this->cache = str($contents)
                 ->explode("\n")
@@ -26,5 +26,10 @@ class SupportedPhpExtensions
         } catch (\ErrorException) {
             return [];
         }
+    }
+
+    protected function fetch(): string|false
+    {
+        return file_get_contents(self::URL);
     }
 }

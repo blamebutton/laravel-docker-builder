@@ -8,6 +8,6 @@ class PhpExtensions
 {
     public static function values(string $phpVersion = null): array
     {
-        return app(SupportedPhpExtensions::class)->fetch($phpVersion);
+        return app(SupportedPhpExtensions::class)->get($phpVersion);
     }
 }
