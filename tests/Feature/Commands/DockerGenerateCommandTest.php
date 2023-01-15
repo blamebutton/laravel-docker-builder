@@ -7,6 +7,27 @@ use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;
 
 /**
+ * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider::boot()
+ * @uses   \BlameButton\LaravelDockerBuilder\Detector\FileDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detector\PhpVersionDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detector\PhpExtensionsDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detector\NodePackageManagerDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detector\NodeBuildToolDetector
+ * @uses   package_path()
+ *
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\BaseCommand::optionalChoice
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpExtensions
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpExtensionsQuestion
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodePackageManagerQuestion
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion
+ * @covers \BlameButton\LaravelDockerBuilder\Objects\Configuration
+ *
  * @covers \BlameButton\LaravelDockerBuilder\Commands\DockerGenerateCommand
  */
 class DockerGenerateCommandTest extends TestCase
@@ -14,7 +35,7 @@ class DockerGenerateCommandTest extends TestCase
     public function provideCommands(): array
     {
         return [
-            [
+            '8.2, pgsql, redis, optimize, alpine, npm, vite' => [
                 [
                     "FROM php:8.2-fpm-alpine AS composer\n",
                     "FROM node:lts-alpine AS node\n",
@@ -28,7 +49,7 @@ class DockerGenerateCommandTest extends TestCase
                 ],
                 'docker:generate -n -p 8.2 -e bcmath,pdo_pgsql,redis -o -a -m npm -b vite',
             ],
-            [
+            '8.1, mysql, apcu, no optimize, no alpine, yarn, mix' => [
                 [
                     "FROM php:8.1-fpm AS composer\n",
                     "FROM node:lts AS node\n",
@@ -50,6 +71,12 @@ class DockerGenerateCommandTest extends TestCase
     /** @dataProvider provideCommands */
     public function testItGeneratesConfigurations(array $expected, string $command): void
     {
+        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
+            $mock->shouldReceive('fetch')->withAnyArgs()->andReturn([
+                'bcmath', 'pdo_mysql', 'pdo_pgsql', 'redis', 'apcu',
+            ]);
+        });
+
         $this->artisan($command);
 
         $contents = file_get_contents(base_path('.docker/php.dockerfile'));
