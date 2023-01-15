@@ -8,7 +8,7 @@ use Mockery\MockInterface;
 use Symfony\Component\Process\Process;
 
 /**
- * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
+ * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
  *
  * @covers \BlameButton\LaravelDockerBuilder\Commands\BaseDockerCommand
  */

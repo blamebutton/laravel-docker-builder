@@ -6,7 +6,7 @@ use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuil
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 
 /**
- * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
+ * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
  *
  * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
  */

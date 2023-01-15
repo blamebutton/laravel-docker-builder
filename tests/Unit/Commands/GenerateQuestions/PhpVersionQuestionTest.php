@@ -11,8 +11,8 @@ use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;
 
 /**
- * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
- * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
+ * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
+ * @uses   \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
  *
  * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion
  */

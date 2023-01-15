@@ -29,11 +29,11 @@ When `--detect` is passed to the `docker:generate` command, it will automaticall
 
 * PHP version, detected using the `php` version in your `composer.json`
 * PHP extensions, detected using the configuration of your project:
-  * Cache driver: Redis, Memcached, APC
-  * Database driver: MySQL, Postgres, SQL Server
-  * Broadcasting driver: Redis
-  * Queue driver: Redis
-  * Session driver: Redis, Memcached, APC
+    * Cache driver: Redis, Memcached, APC
+    * Database driver: MySQL, Postgres, SQL Server
+    * Broadcasting driver: Redis
+    * Queue driver: Redis
+    * Session driver: Redis, Memcached, APC
 * Node package manager, detected using the existence of `package-lock.json` or `yarn.lock`
 * Node build tool, detected using the existence of `vite.config.js` or `webpack.mix.js`
 

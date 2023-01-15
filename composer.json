@@ -3,7 +3,13 @@
   "description": "Production ready Docker files for Laravel",
   "license": "MIT",
   "type": "library",
-  "keywords": ["laravel", "docker", "image","generate", "kubernetes"],
+  "keywords": [
+    "laravel",
+    "docker",
+    "image",
+    "generate",
+    "kubernetes"
+  ],
   "authors": [
     {
       "name": "Bram Ceulemans",

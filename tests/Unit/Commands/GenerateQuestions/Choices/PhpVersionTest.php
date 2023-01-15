@@ -6,7 +6,7 @@ use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersi
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 
 /**
- * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
+ * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
  *
  * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
  */

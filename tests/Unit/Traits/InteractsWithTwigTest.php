@@ -9,8 +9,8 @@ use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
 
 /**
- * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
- * @uses package_path()
+ * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
+ * @uses   package_path()
  *
  * @covers \BlameButton\LaravelDockerBuilder\Traits\InteractsWithTwig
  */

@@ -10,12 +10,13 @@ use Illuminate\Support\ServiceProvider;
 use Mockery\MockInterface;
 
 /**
- * @uses \BlameButton\LaravelDockerBuilder\Commands\DockerGenerateCommand::getOptions()
- * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
- * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpExtensions
- * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager
- * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
- * @uses package_path()
+ * @uses   \BlameButton\LaravelDockerBuilder\Commands\DockerCiCommand::getArguments()
+ * @uses   \BlameButton\LaravelDockerBuilder\Commands\DockerGenerateCommand::getOptions()
+ * @uses   \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
+ * @uses   \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpExtensions
+ * @uses   \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager
+ * @uses   \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
+ * @uses   package_path()
  *
  * @covers \BlameButton\LaravelDockerBuilder\DockerServiceProvider
  */

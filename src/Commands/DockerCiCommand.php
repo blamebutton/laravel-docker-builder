@@ -15,8 +15,9 @@ class DockerCiCommand extends BaseCommand
     public function handle(): int
     {
         if ($argument = $this->argument('ci-platform')) {
-            if (!in_array($argument, CiPlatform::values())) {
+            if (! in_array($argument, CiPlatform::values())) {
                 $this->error("Invalid value [$argument] for argument [ci-platform].");
+
                 return self::FAILURE;
             }
 

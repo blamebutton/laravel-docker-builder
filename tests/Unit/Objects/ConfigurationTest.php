@@ -6,7 +6,7 @@ use BlameButton\LaravelDockerBuilder\Objects\Configuration;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 
 /**
- * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
+ * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
  *
  * @covers \BlameButton\LaravelDockerBuilder\Objects\Configuration
  */
