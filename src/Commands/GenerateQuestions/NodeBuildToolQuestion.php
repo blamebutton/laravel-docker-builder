@@ -28,7 +28,7 @@ class NodeBuildToolQuestion extends BaseQuestion
 
         $detected = app(NodeBuildToolDetector::class)->detect();
 
-        if ($command->option('detect')) {
+        if ($detected && $command->option('detect')) {
             return $detected;
         }
 

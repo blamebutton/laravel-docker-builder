@@ -28,7 +28,7 @@ class NodePackageManagerQuestion extends BaseQuestion
 
         $detected = app(NodePackageManagerDetector::class)->detect();
 
-        if ($command->option('detect')) {
+        if ($detected && $command->option('detect')) {
             return $detected;
         }
 

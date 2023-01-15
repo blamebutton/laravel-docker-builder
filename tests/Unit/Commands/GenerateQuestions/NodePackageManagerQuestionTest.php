@@ -51,6 +51,8 @@ class NodePackageManagerQuestionTest extends TestCase
             ]);
 
         $answer = app(NodePackageManagerQuestion::class)->getAnswer($mock);
+
+        self::assertEquals($expected, $answer);
     }
 
     public function provideDetectedPackageManagers(): array
@@ -93,7 +95,7 @@ class NodePackageManagerQuestionTest extends TestCase
     public function testItAsksQuestion($expected, $input): void
     {
         $mock = $this->createMock(BaseCommand::class);
-        $mock->expects($this->exactly(2))
+        $mock->expects($this->once())
             ->method('option')
             ->willReturnMap([
                 ['node-package-manager', null],

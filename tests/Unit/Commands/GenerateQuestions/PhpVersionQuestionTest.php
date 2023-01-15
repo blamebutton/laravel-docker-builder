@@ -3,20 +3,20 @@
 namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
-use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool;
-use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion;
-use BlameButton\LaravelDockerBuilder\Detectors\NodeBuildToolDetector;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion;
+use BlameButton\LaravelDockerBuilder\Detectors\PhpVersionDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;
 
 /**
  * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
- * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
  *
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion
+ * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion
  */
-class NodeBuildToolQuestionTest extends TestCase
+class PhpVersionQuestionTest extends TestCase
 {
     public function testItThrowsErrorOnInvalidInput(): void
     {
@@ -24,19 +24,20 @@ class NodeBuildToolQuestionTest extends TestCase
         $mock->expects($this->once())
             ->method('option')
             ->willReturnMap([
-                ['node-build-tool', 'invalid-value'],
+                ['php-version', 'invalid-value'],
             ]);
 
         $this->expectException(InvalidOptionValueException::class);
 
-        app(NodeBuildToolQuestion::class)->getAnswer($mock);
+        app(PhpVersionQuestion::class)->getAnswer($mock);
     }
 
     private function provideOptions(): array
     {
         return [
-            'vite' => [NodeBuildTool::VITE, 'vite'],
-            'mix' => [NodeBuildTool::MIX, 'mix'],
+            '8.2' => [PhpVersion::v8_2, '8.2'],
+            '8.1' => [PhpVersion::v8_1, '8.1'],
+            '8.0' => [PhpVersion::v8_0, '8.0'],
         ];
     }
 
@@ -47,38 +48,39 @@ class NodeBuildToolQuestionTest extends TestCase
         $mock->expects($this->once())
             ->method('option')
             ->willReturnMap([
-                ['node-build-tool', $input],
+                ['php-version', $input],
             ]);
 
-        $answer = app(NodeBuildToolQuestion::class)->getAnswer($mock);
+        $answer = app(PhpVersionQuestion::class)->getAnswer($mock);
 
         self::assertEquals($expected, $answer);
     }
 
-    public function provideDetectedBuildTools(): array
+    public function provideDetected(): array
     {
         return [
-            'vite' => [NodeBuildTool::VITE, NodeBuildTool::VITE],
-            'mix' => [NodeBuildTool::MIX, NodeBuildTool::MIX],
+            '8.2' => [PhpVersion::v8_2, '8.2'],
+            '8.1' => [PhpVersion::v8_1, '8.1'],
+            '8.0' => [PhpVersion::v8_0, '8.0'],
         ];
     }
 
-    /** @dataProvider provideDetectedBuildTools */
-    public function testItDetectsBuildTools($expected, $detected): void
+    /** @dataProvider provideDetected */
+    public function testItDetectsPackageManagers($expected, $detected): void
     {
         $mock = $this->createMock(BaseCommand::class);
         $mock->expects($this->exactly(2))
             ->method('option')
             ->willReturnMap([
-                ['node-build-tool', null],
+                ['php-version', null],
                 ['detect', true],
             ]);
 
-        $this->mock(NodeBuildToolDetector::class, function (MockInterface $mock) use ($detected) {
+        $this->mock(PhpVersionDetector::class, function (MockInterface $mock) use ($detected) {
             $mock->shouldReceive('detect')->once()->andReturn($detected);
         });
 
-        $answer = app(NodeBuildToolQuestion::class)->getAnswer($mock);
+        $answer = app(PhpVersionQuestion::class)->getAnswer($mock);
 
         self::assertEquals($expected, $answer);
     }
@@ -86,8 +88,9 @@ class NodeBuildToolQuestionTest extends TestCase
     public function provideQuestionInput(): array
     {
         return [
-            'vite' => ['vite', 'vite'],
-            'mix' => ['mix', 'mix'],
+            '8.2' => ['8.2', '8.2'],
+            '8.1' => ['8.1', '8.1'],
+            '8.0' => ['8.0', '8.0'],
         ];
     }
 
@@ -95,21 +98,21 @@ class NodeBuildToolQuestionTest extends TestCase
     public function testItAsksQuestion($expected, $input): void
     {
         $mock = $this->createMock(BaseCommand::class);
-        $mock->expects($this->once())
+        $mock->expects($this->exactly(1))
             ->method('option')
             ->willReturnMap([
-                ['node-build-tool', null],
+                ['php-version', null],
                 ['detect', false],
             ]);
         $mock->expects($this->once())
             ->method('choice')
             ->willReturn($input);
 
-        $this->mock(NodeBuildToolDetector::class, function (MockInterface $mock) {
+        $this->mock(PhpVersionDetector::class, function (MockInterface $mock) {
             $mock->shouldReceive('detect')->once()->andReturn(false);
         });
 
-        $answer = app(NodeBuildToolQuestion::class)->getAnswer($mock);
+        $answer = app(PhpVersionQuestion::class)->getAnswer($mock);
 
         self::assertEquals($expected, $answer);
     }

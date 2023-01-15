@@ -28,6 +28,9 @@ class SupportedPhpExtensions
             ->toArray();
     }
 
+    /**
+     * @codeCoverageIgnore this fetches an actual file from GitHub
+     */
     protected function fetch(): array|false
     {
         return file(self::URL);
