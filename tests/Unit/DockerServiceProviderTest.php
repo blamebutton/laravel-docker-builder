@@ -2,8 +2,6 @@
 
 namespace BlameButton\LaravelDockerBuilder\Tests\Unit;
 
-use BlameButton\LaravelDockerBuilder\Commands\DockerGenerateCommand;
-use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
 use BlameButton\LaravelDockerBuilder\DockerServiceProvider;
 use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;

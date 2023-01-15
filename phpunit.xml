@@ -16,6 +16,10 @@
             <directory suffix=".php">src</directory>
         </include>
 
+        <exclude>
+            <file>src/helpers.php</file>
+        </exclude>
+
         <report>
             <html outputDirectory=".coverage"/>
             <text outputFile="php://stdout"/>

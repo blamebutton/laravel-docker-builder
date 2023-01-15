@@ -4,7 +4,6 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Feature\Commands;
 
 use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
-use Illuminate\Contracts\Console\Kernel;
 use Mockery\MockInterface;
 
 /**
@@ -118,19 +117,19 @@ class DockerGenerateCommandTest extends TestCase
     {
         return [
             'php version' => [
-                "Invalid value [unsupported] for option [php-version]",
+                'Invalid value [unsupported] for option [php-version]',
                 'docker:generate -n -p unsupported -e bcmath -o -a -m npm -b vite',
             ],
             'php extensions' => [
-                "Extension [unsupported] is not supported.",
+                'Extension [unsupported] is not supported.',
                 'docker:generate -n -p 8.2 -e bcmath,unsupported -o -a -m npm -b vite',
             ],
             'node package manager' => [
-                "Invalid value [unsupported] for option [node-package-manager]",
+                'Invalid value [unsupported] for option [node-package-manager]',
                 'docker:generate -n -p 8.2 -e bcmath -o -a -m unsupported -b vite',
             ],
             'node build tool' => [
-                "Invalid value [unsupported] for option [node-build-tool]",
+                'Invalid value [unsupported] for option [node-build-tool]',
                 'docker:generate -n -p 8.2 -e bcmath -o -a -m npm -b unsupported',
             ],
         ];
