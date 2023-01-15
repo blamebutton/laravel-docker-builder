@@ -25,7 +25,7 @@ class InteractsWithTwigTest extends TestCase
         self::assertInstanceOf(Environment::class, $twig);
         $loader = $twig->getLoader();
         self::assertInstanceOf(FilesystemLoader::class, $loader);
-        self::assertEquals([package_path('docker/template')], $loader->getPaths());
+        self::assertEquals([package_path('resources/templates')], $loader->getPaths());
     }
 
     public function testItCachesTwigInstances(): void
