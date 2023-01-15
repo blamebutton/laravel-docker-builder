@@ -1,7 +1,7 @@
 {# import node partial, exposed as "node" layer #}
-{% include 'partials/node.dockerfile.twig' %}
+{% include 'partials/node-build-assets.dockerfile.twig' %}
 
-FROM nginx:1-alpine
+FROM nginx:1{{ alpine ? '-alpine' : '' }}
 
 WORKDIR /app/public
 

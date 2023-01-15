@@ -3,7 +3,6 @@
 namespace BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
-use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\ArtisanOptimize;
 
 class ArtisanOptimizeQuestion extends BaseQuestion
 {
@@ -13,12 +12,9 @@ class ArtisanOptimizeQuestion extends BaseQuestion
             return true;
         }
 
-        $choice = $command->choice(
+        return $command->confirm(
             question: 'Do you want to run "php artisan optimize" when the image boots?',
-            choices: ArtisanOptimize::values(),
-            default: ArtisanOptimize::YES,
+            default: true,
         );
-
-        return ArtisanOptimize::YES === $choice;
     }
 }

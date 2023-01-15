@@ -55,7 +55,7 @@ class InteractsWithTwigTest extends TestCase
 
         $output = $class->render('nginx.dockerfile.twig', []);
 
-        self::assertStringContainsString('FROM nginx:1-alpine', $output);
+        self::assertStringContainsString("FROM nginx:1\n", $output);
     }
 
     public function testItRendersPhpTemplate(): void
@@ -67,6 +67,6 @@ class InteractsWithTwigTest extends TestCase
             'php_version' => '8.2',
         ]);
 
-        self::assertStringContainsString('FROM php:8.2-fpm-alpine', $output);
+        self::assertStringContainsString("FROM php:8.2-fpm\n", $output);
     }
 }

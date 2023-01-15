@@ -50,6 +50,7 @@ See all available options, and their supported values, by running `php artisan d
 * `-p, --php-version` - PHP version for Docker image
 * `-e, --php-extensions` - PHP extensions (comma-separated) to include in Docker image
 * `-o, --optimize` - Run `php artisan optimize` on container start
+* `-a, --optimize` - Run `php artisan optimize` on container start
 * `-m, --node-package-manager` - Install Node dependencies using NPM or Yarn
 * `-b, --node-build-tool` - Run Vite.js or Laravel Mix build step
 

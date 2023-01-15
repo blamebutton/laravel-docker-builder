@@ -2,6 +2,7 @@
 
 namespace BlameButton\LaravelDockerBuilder\Commands;
 
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager;
@@ -31,6 +32,7 @@ class DockerGenerateCommand extends BaseCommand
                 phpVersion: $phpVersion = app(PhpVersionQuestion::class)->getAnswer($this),
                 phpExtensions: app(PhpExtensionsQuestion::class)->getAnswer($this, $phpVersion),
                 artisanOptimize: app(ArtisanOptimizeQuestion::class)->getAnswer($this),
+                alpine: app(AlpineQuestion::class)->getAnswer($this),
                 nodePackageManager: $nodePackageManager = app(NodePackageManagerQuestion::class)->getAnswer($this),
                 nodeBuildTool: $nodePackageManager ? app(NodeBuildToolQuestion::class)->getAnswer($this) : false,
             );
@@ -72,6 +74,9 @@ class DockerGenerateCommand extends BaseCommand
             ['Artisan Optimize',
                 '<comment>'.json_encode($config->isArtisanOptimize()).'</comment>',
             ],
+            ['Alpine images',
+                '<comment>'.json_encode($config->isAlpine()).'</comment>',
+            ],
             ['Node Package Manager',
                 NodePackageManager::name($config->getNodePackageManager()),
             ],
@@ -95,6 +100,7 @@ class DockerGenerateCommand extends BaseCommand
             'php_version' => $config->getPhpVersion(),
             'php_extensions' => implode(' ', $config->getPhpExtensions()),
             'artisan_optimize' => $config->isArtisanOptimize(),
+            'alpine' => $config->isAlpine(),
             'node_package_manager' => $config->getNodePackageManager(),
             'node_build_tool' => $config->getNodeBuildTool(),
         ];
@@ -144,7 +150,7 @@ class DockerGenerateCommand extends BaseCommand
                 mode: InputOption::VALUE_NEGATABLE,
                 description: 'Add "php artisan optimize" to entrypoint',
             ),
-            new InputOption(
+            new InputOption( // TODO: implement opcache extension
                 name: 'opcache',
                 mode: InputOption::VALUE_NEGATABLE,
                 description: 'Add "opcache" extension and configure it',
@@ -152,6 +158,7 @@ class DockerGenerateCommand extends BaseCommand
             ),
             new InputOption(
                 name: 'alpine',
+                shortcut: 'a',
                 mode: InputOption::VALUE_NEGATABLE,
                 description: 'Use Alpine Linux based images',
                 default: true,

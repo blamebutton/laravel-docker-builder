@@ -1,6 +1,6 @@
 {% if node_package_manager %}
 # built frontend assets with {{ node_package_manager }} and {{ node_build_tool }}
-FROM node:lts-alpine AS node
+FROM node:lts{{ alpine ? '-alpine' : '' }} AS node
 WORKDIR /app
 
 {# install node dependencies #}
