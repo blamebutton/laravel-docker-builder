@@ -15,4 +15,12 @@ class CiPlatform
             self::GITLAB_CI,
         ];
     }
+
+    public static function name(string $value): string
+    {
+        return match ($value) {
+            self::GITHUB_ACTIONS => 'GitHub Actions',
+            self::GITLAB_CI => 'GitLab CI/CD',
+        };
+    }
 }

@@ -3,7 +3,7 @@
 namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Commands\GenerateQuestions\Choices;
 
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
-use BlameButton\LaravelDockerBuilder\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
