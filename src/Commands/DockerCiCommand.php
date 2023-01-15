@@ -4,18 +4,33 @@ namespace BlameButton\LaravelDockerBuilder\Commands;
 
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\CiPlatform;
 use BlameButton\LaravelDockerBuilder\Detectors\CiPlatformDetector;
+use Symfony\Component\Console\Input\InputArgument;
 
 class DockerCiCommand extends BaseCommand
 {
     protected $name = 'docker:ci';
 
-    protected $description = '';
+    protected $description = 'Generate a CI file (supported: GitHub Actions, GitLab CI)';
 
     public function handle(): int
     {
+        if ($argument = $this->argument('ci-platform')) {
+            if (!in_array($argument, CiPlatform::values())) {
+                $this->error("Invalid value [$argument] for argument [ci-platform].");
+                return self::FAILURE;
+            }
+
+            return $this->copy($argument);
+        }
+
         $detected = app(CiPlatformDetector::class)->detect();
 
-        if (CiPlatform::GITLAB_CI === $detected) {
+        return self::SUCCESS;
+    }
+
+    protected function copy(string $platform): int
+    {
+        if (CiPlatform::GITLAB_CI === $platform) {
             $output = base_path('.gitlab-ci.yml');
 
             if (file_exists($output)) {
@@ -30,5 +45,16 @@ class DockerCiCommand extends BaseCommand
         }
 
         return self::SUCCESS;
+    }
+
+    protected function getArguments(): array
+    {
+        return [
+            new InputArgument(
+                name: 'ci-platform',
+                mode: InputArgument::OPTIONAL,
+                description: 'CI platform (supported: github, gitlab)',
+            ),
+        ];
     }
 }

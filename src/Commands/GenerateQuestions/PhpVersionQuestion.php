@@ -23,7 +23,7 @@ class PhpVersionQuestion extends BaseQuestion
         if ($option = $command->option('php-version')) {
             return in_array($option, PhpVersion::values())
                 ? $option
-                : throw new InvalidOptionValueException("Invalid value [$option] for option [php-version]");
+                : throw new InvalidOptionValueException("Invalid value [$option] for option [php-version].");
         }
 
         $detected = app(PhpVersionDetector::class)->detect();

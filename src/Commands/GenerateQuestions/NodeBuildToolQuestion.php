@@ -23,7 +23,7 @@ class NodeBuildToolQuestion extends BaseQuestion
         if ($option = $command->option('node-build-tool')) {
             return in_array($option, NodeBuildTool::values())
                 ? $option
-                : throw new InvalidOptionValueException("Invalid value [$option] for option [node-build-tool]");
+                : throw new InvalidOptionValueException("Invalid value [$option] for option [node-build-tool].");
         }
 
         $detected = app(NodeBuildToolDetector::class)->detect();

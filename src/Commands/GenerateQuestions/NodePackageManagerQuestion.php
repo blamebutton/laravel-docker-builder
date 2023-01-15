@@ -23,7 +23,7 @@ class NodePackageManagerQuestion extends BaseQuestion
         if ($option = $command->option('node-package-manager')) {
             return in_array($option, NodePackageManager::values())
                 ? $option
-                : throw new InvalidOptionValueException("Invalid value [$option] for option [node-package-manager]");
+                : throw new InvalidOptionValueException("Invalid value [$option] for option [node-package-manager].");
         }
 
         $detected = app(NodePackageManagerDetector::class)->detect();
