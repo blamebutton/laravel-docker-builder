@@ -7,25 +7,25 @@ use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;
 
 /**
- * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider::boot()
+ * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
  * @uses   \BlameButton\LaravelDockerBuilder\Detector\FileDetector
  * @uses   \BlameButton\LaravelDockerBuilder\Detector\PhpVersionDetector
  * @uses   \BlameButton\LaravelDockerBuilder\Detector\PhpExtensionsDetector
  * @uses   \BlameButton\LaravelDockerBuilder\Detector\NodePackageManagerDetector
  * @uses   \BlameButton\LaravelDockerBuilder\Detector\NodeBuildToolDetector
  * @uses   package_path()
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\BaseCommand::optionalChoice
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpExtensions
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpExtensionsQuestion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodePackageManagerQuestion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion
  *
- * @covers \BlameButton\LaravelDockerBuilder\Commands\BaseCommand::optionalChoice
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpExtensions
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpExtensionsQuestion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodePackageManagerQuestion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion
  * @covers \BlameButton\LaravelDockerBuilder\Objects\Configuration
  * @covers \BlameButton\LaravelDockerBuilder\Commands\DockerGenerateCommand
  */

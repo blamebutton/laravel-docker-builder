@@ -7,11 +7,17 @@ use Illuminate\Support\Collection;
 
 class PhpExtensionsDetector implements DetectorContract
 {
-    /**
-     * @param  string[]  $supportedExtensions
-     */
-    public function __construct(private array $supportedExtensions)
+    private array $supported;
+
+    public function supported(array $supported = null): self|array
     {
+        if (is_null($supported)) {
+            return $this->supported;
+        }
+
+        $this->supported = $supported;
+
+        return $this;
     }
 
     public function detect(): string|false
@@ -29,9 +35,9 @@ class PhpExtensionsDetector implements DetectorContract
             ->flatten()
             ->unique()
             ->sort()
-            ->intersect($this->supportedExtensions)
-            ->map(fn (string $extension) => array_search($extension, $this->supportedExtensions))
-            ->filter()
+            ->intersect($this->supported())
+            ->map(fn (string $extension) => array_search($extension, $this->supported()))
+            ->filter(fn ($value) => is_int($value))
             ->join(',');
     }
 

@@ -7,7 +7,7 @@ use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;
 
 /**
- * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider::boot()
+ * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
  *
  * @covers \BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions
  */

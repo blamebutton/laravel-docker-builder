@@ -22,7 +22,7 @@
 
         <report>
             <html outputDirectory=".coverage"/>
-            <text outputFile="php://stdout"/>
+            <text outputFile="php://stdout" showOnlySummary="true"/>
         </report>
     </coverage>
 </phpunit>
