@@ -22,7 +22,7 @@ class DockerServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__.'/../config/docker-builder.php' => config_path('docker-builder.php'),
+            dirname(__DIR__).'/config/docker-builder.php' => config_path('docker-builder.php'),
         ]);
 
         $this->mergeConfigFrom(
