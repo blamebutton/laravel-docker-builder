@@ -14,18 +14,18 @@ class SupportedPhpExtensions
             return $this->cache;
         }
 
-        try {
-            $contents = $this->fetch();
+        $contents = $this->fetch();
 
-            return $this->cache = collect($contents)
-                ->filter(fn (string $extension): bool => is_null($phpVersion) || str($extension)->contains($phpVersion))
-                ->map(fn (string $extension): string => str($extension)->trim()->before(' '))
-                ->filter()
-                ->values()
-                ->toArray();
-        } catch (\ErrorException) {
+        if ($contents === false) {
             return [];
         }
+
+        return $this->cache = collect($contents)
+            ->filter(fn (string $extension): bool => is_null($phpVersion) || str($extension)->contains($phpVersion))
+            ->map(fn (string $extension): string => str($extension)->trim()->before(' '))
+            ->filter()
+            ->values()
+            ->toArray();
     }
 
     protected function fetch(): array|false
