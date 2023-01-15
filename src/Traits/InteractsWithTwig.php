@@ -18,7 +18,7 @@ trait InteractsWithTwig
             return $this->twig;
         }
 
-        $path = package_path('docker/template');
+        $path = package_path('resources/templates');
         $loader = new FilesystemLoader($path);
 
         return $this->twig = new TwigEnvironment($loader);
