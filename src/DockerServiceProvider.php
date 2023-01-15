@@ -6,10 +6,16 @@ use BlameButton\LaravelDockerBuilder\Commands\DockerBuildCommand;
 use BlameButton\LaravelDockerBuilder\Commands\DockerCiCommand;
 use BlameButton\LaravelDockerBuilder\Commands\DockerGenerateCommand;
 use BlameButton\LaravelDockerBuilder\Commands\DockerPushCommand;
+use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use Illuminate\Support\ServiceProvider;
 
 class DockerServiceProvider extends ServiceProvider
 {
+    public function register(): void
+    {
+        $this->app->singleton(SupportedPhpExtensions::class);
+    }
+
     public function boot(): void
     {
         if ($this->app->runningInConsole()) {

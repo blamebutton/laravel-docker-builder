@@ -4,7 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpExtensions;
-use BlameButton\LaravelDockerBuilder\Detector\PhpExtensionsDetector;
+use BlameButton\LaravelDockerBuilder\Detectors\PhpExtensionsDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 
 class PhpExtensionsQuestion extends BaseQuestion
@@ -21,29 +21,31 @@ class PhpExtensionsQuestion extends BaseQuestion
      */
     public function getAnswer(BaseCommand $command, string $phpVersion): array
     {
-        $supportedExtensions = PhpExtensions::values($phpVersion);
+        $supported = PhpExtensions::values($phpVersion);
 
         if ($option = $command->option('php-extensions')) {
             $extensions = explode(',', $option);
 
             foreach ($extensions as $extension) {
-                if (in_array($extension, $supportedExtensions)) {
+                if (in_array($extension, $supported)) {
                     continue;
                 }
 
                 throw new InvalidOptionValueException("Extension [$extension] is not supported.");
             }
 
-            return array_intersect($extensions, $supportedExtensions);
+            return array_intersect($extensions, $supported);
         }
 
-        $detected = app(PhpExtensionsDetector::class, ['supportedExtensions' => $supportedExtensions])->detect();
+        $detected = app(PhpExtensionsDetector::class)
+            ->supported($supported)
+            ->detect();
 
         if ($command->option('detect')) {
             $detected = explode(',', $detected);
 
             foreach ($detected as $key => $value) {
-                $detected[$key] = $supportedExtensions[$value];
+                $detected[$key] = $supported[$value];
             }
 
             return $detected;
@@ -51,7 +53,7 @@ class PhpExtensionsQuestion extends BaseQuestion
 
         return $command->choice(
             question: 'PHP extensions',
-            choices: $supportedExtensions,
+            choices: $supported,
             default: $detected,
             multiple: true,
         );

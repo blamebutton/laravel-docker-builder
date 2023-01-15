@@ -4,7 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
-use BlameButton\LaravelDockerBuilder\Detector\PhpVersionDetector;
+use BlameButton\LaravelDockerBuilder\Detectors\PhpVersionDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 
 class PhpVersionQuestion extends BaseQuestion

@@ -4,7 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool;
-use BlameButton\LaravelDockerBuilder\Detector\NodeBuildToolDetector;
+use BlameButton\LaravelDockerBuilder\Detectors\NodeBuildToolDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 
 class NodeBuildToolQuestion extends BaseQuestion

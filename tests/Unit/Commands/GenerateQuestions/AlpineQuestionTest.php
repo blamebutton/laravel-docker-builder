@@ -7,7 +7,7 @@ use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 
 /**
- * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider::boot()
+ * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
  *
  * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion
  */

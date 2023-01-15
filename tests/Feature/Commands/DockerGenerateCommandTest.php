@@ -4,29 +4,28 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Feature\Commands;
 
 use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
-use Illuminate\Contracts\Console\Kernel;
 use Mockery\MockInterface;
 
 /**
- * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider::boot()
- * @uses   \BlameButton\LaravelDockerBuilder\Detector\FileDetector
- * @uses   \BlameButton\LaravelDockerBuilder\Detector\PhpVersionDetector
- * @uses   \BlameButton\LaravelDockerBuilder\Detector\PhpExtensionsDetector
- * @uses   \BlameButton\LaravelDockerBuilder\Detector\NodePackageManagerDetector
- * @uses   \BlameButton\LaravelDockerBuilder\Detector\NodeBuildToolDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
+ * @uses   \BlameButton\LaravelDockerBuilder\Detectors\FileDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detectors\PhpVersionDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detectors\PhpExtensionsDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detectors\NodePackageManagerDetector
+ * @uses   \BlameButton\LaravelDockerBuilder\Detectors\NodeBuildToolDetector
  * @uses   package_path()
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\BaseCommand::optionalChoice
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpExtensions
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpExtensionsQuestion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodePackageManagerQuestion
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
+ * @uses \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion
  *
- * @covers \BlameButton\LaravelDockerBuilder\Commands\BaseCommand::optionalChoice
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpExtensions
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpExtensionsQuestion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePackageManager
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodePackageManagerQuestion
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuildTool
- * @covers \BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\NodeBuildToolQuestion
  * @covers \BlameButton\LaravelDockerBuilder\Objects\Configuration
  * @covers \BlameButton\LaravelDockerBuilder\Commands\DockerGenerateCommand
  */
@@ -118,19 +117,19 @@ class DockerGenerateCommandTest extends TestCase
     {
         return [
             'php version' => [
-                "Invalid value [unsupported] for option [php-version]",
+                'Invalid value [unsupported] for option [php-version]',
                 'docker:generate -n -p unsupported -e bcmath -o -a -m npm -b vite',
             ],
             'php extensions' => [
-                "Extension [unsupported] is not supported.",
+                'Extension [unsupported] is not supported.',
                 'docker:generate -n -p 8.2 -e bcmath,unsupported -o -a -m npm -b vite',
             ],
             'node package manager' => [
-                "Invalid value [unsupported] for option [node-package-manager]",
+                'Invalid value [unsupported] for option [node-package-manager]',
                 'docker:generate -n -p 8.2 -e bcmath -o -a -m unsupported -b vite',
             ],
             'node build tool' => [
-                "Invalid value [unsupported] for option [node-build-tool]",
+                'Invalid value [unsupported] for option [node-build-tool]',
                 'docker:generate -n -p 8.2 -e bcmath -o -a -m npm -b unsupported',
             ],
         ];
