@@ -73,4 +73,15 @@ class PhpVersionDetectorTest extends TestCase
 
         self::assertEquals($expected, $detected);
     }
+
+    public function testItGetsComposerFileContents(): void
+    {
+        $contents = app(PhpVersionDetector::class)->getComposerFileContents();
+
+        self::assertJson($contents);
+
+        $json = json_decode($contents);
+
+        self::assertEquals('laravel/laravel', data_get($json, 'name'));
+    }
 }
