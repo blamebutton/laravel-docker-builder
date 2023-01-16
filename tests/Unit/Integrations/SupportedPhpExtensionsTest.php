@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Integrations;
 
 use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
+use Illuminate\Support\Facades\Http;
 use Mockery\MockInterface;
 
 /**
@@ -71,5 +72,37 @@ class SupportedPhpExtensionsTest extends TestCase
 
         app(SupportedPhpExtensions::class)->get();
         app(SupportedPhpExtensions::class)->get();
+    }
+
+    public function testItReturnsFalseOnError(): void
+    {
+        Http::fake([
+            'github.com/*' => Http::response("bcmath\nmemcached", 500),
+        ]);
+
+        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
+            $mock->shouldAllowMockingProtectedMethods();
+            $mock->shouldReceive('fetch')->once()->passthru();
+        });
+
+        $response = app(SupportedPhpExtensions::class)->fetch();
+
+        self::assertFalse($response);
+    }
+
+    public function testItReturnsExtensions(): void
+    {
+        Http::fake([
+            'github.com/*' => Http::response("bcmath\nmemcached\n"),
+        ]);
+
+        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
+            $mock->shouldAllowMockingProtectedMethods();
+            $mock->shouldReceive('fetch')->once()->passthru();
+        });
+
+        $response = app(SupportedPhpExtensions::class)->fetch();
+
+        self::assertEquals(['bcmath', 'memcached'], $response);
     }
 }

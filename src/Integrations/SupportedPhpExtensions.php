@@ -2,6 +2,9 @@
 
 namespace BlameButton\LaravelDockerBuilder\Integrations;
 
+use Illuminate\Support\Facades\Http;
+use function Symfony\Component\String\b;
+
 class SupportedPhpExtensions
 {
     private const URL = 'https://github.com/mlocati/docker-php-extension-installer/raw/master/data/supported-extensions';
@@ -10,7 +13,7 @@ class SupportedPhpExtensions
 
     public function get(string $phpVersion = null): array
     {
-        if (! is_null($this->cache)) {
+        if (!is_null($this->cache)) {
             return $this->cache;
         }
 
@@ -21,18 +24,24 @@ class SupportedPhpExtensions
         }
 
         return $this->cache = collect($contents)
-            ->filter(fn (string $extension): bool => is_null($phpVersion) || str($extension)->contains($phpVersion))
-            ->map(fn (string $extension): string => str($extension)->trim()->before(' '))
+            ->filter(fn(string $extension): bool => is_null($phpVersion) || str($extension)->contains($phpVersion))
+            ->map(fn(string $extension): string => str($extension)->trim()->before(' '))
             ->filter()
             ->values()
             ->toArray();
     }
 
-    /**
-     * @codeCoverageIgnore this fetches an actual file from GitHub
-     */
-    protected function fetch(): array|false
+    public function fetch(): array|false
     {
-        return file(self::URL);
+        $response = rescue(
+            callback: fn() => Http::get(self::URL),
+            rescue: false,
+        );
+
+        if ($response === false || $response->failed()) {
+            return false;
+        }
+
+        return array_filter(explode("\n", $response->body()));
     }
 }
