@@ -46,8 +46,8 @@ class PhpExtensionsQuestion extends BaseQuestion
         }
 
         $default = collect($detected)
-            ->map(fn($extension) => array_search($extension, $supported))
-            ->where(fn($key) => is_int($key))
+            ->map(fn ($extension) => array_search($extension, $supported))
+            ->where(fn ($key) => is_int($key))
             ->join(',');
 
         return $command->choice(

@@ -52,7 +52,7 @@ class PhpExtensionsDetectorTest extends TestCase
                 ],
             ],
             [
-                ['apcu','bcmath'],
+                ['apcu', 'bcmath'],
                 [
                     'cache.default' => 'apc',
                     'cache.stores.apc.driver' => 'apc',
@@ -94,7 +94,7 @@ class PhpExtensionsDetectorTest extends TestCase
                 ],
             ],
             [
-                ['apcu', 'bcmath','pdo_mysql'],
+                ['apcu', 'bcmath', 'pdo_mysql'],
                 [
                     'cache.default' => 'apc',
                     'cache.stores.apc.driver' => 'apc',
@@ -108,7 +108,7 @@ class PhpExtensionsDetectorTest extends TestCase
                 ],
             ],
             [
-                ['bcmath','memcached','pdo_sqlsrv','redis','sqlsrv'],
+                ['bcmath', 'memcached', 'pdo_sqlsrv', 'redis', 'sqlsrv'],
                 [
                     'cache.default' => 'memcached',
                     'cache.stores.memcached.driver' => 'memcached',
