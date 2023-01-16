@@ -6,10 +6,11 @@ use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodeBuil
 
 class NodeBuildToolDetector extends FileDetector
 {
-    protected function getPathMapping(): array
+    public function getPathMapping(): array
     {
         return [
             base_path('vite.config.js') => NodeBuildTool::VITE,
+            base_path('vite.config.ts') => NodeBuildTool::VITE,
             base_path('webpack.mix.js') => NodeBuildTool::MIX,
         ];
     }

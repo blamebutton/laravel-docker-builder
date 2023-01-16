@@ -6,7 +6,7 @@ use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\NodePack
 
 class NodePackageManagerDetector extends FileDetector
 {
-    protected function getPathMapping(): array
+    public function getPathMapping(): array
     {
         return [
             base_path('package-lock.json') => NodePackageManager::NPM,

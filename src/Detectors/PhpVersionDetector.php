@@ -11,20 +11,19 @@ class PhpVersionDetector implements DetectorContract
 {
     public function detect(): string|false
     {
-        $composer = file_get_contents(base_path('composer.json'));
-        if (! $composer) {
+        $composer = $this->getComposerFileContents();
+        if ($composer === false) {
             return false;
         }
 
         $composer = json_decode($composer);
         $php = data_get($composer, 'require.php');
-
         if (! is_string($php)) {
             return false;
         }
 
-        $parser = new VersionParser();
-        $php = $parser->parseConstraints($php)
+        $php = app(VersionParser::class)
+            ->parseConstraints($php)
             ->getLowerBound()
             ->getVersion();
 
@@ -33,5 +32,10 @@ class PhpVersionDetector implements DetectorContract
             callback: fn ($value) => Str::startsWith($php, $value),
             default: false,
         );
+    }
+
+    public function getComposerFileContents(): string|false
+    {
+        return file_get_contents(base_path('composer.json'));
     }
 }
