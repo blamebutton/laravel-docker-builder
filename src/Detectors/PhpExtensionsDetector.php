@@ -20,7 +20,7 @@ class PhpExtensionsDetector implements DetectorContract
         return $this;
     }
 
-    public function detect(): string|false
+    public function detect(): string
     {
         $extensions = [
             $this->getDefaultExtensions(),
@@ -44,7 +44,7 @@ class PhpExtensionsDetector implements DetectorContract
     /**
      * @return string[]
      */
-    private function getDefaultExtensions(): array
+    public function getDefaultExtensions(): array
     {
         return ['bcmath'];
     }
@@ -52,7 +52,7 @@ class PhpExtensionsDetector implements DetectorContract
     /**
      * @return string[]
      */
-    private function getCacheExtensions(): array
+    public function getCacheExtensions(): array
     {
         $store = config('cache.default');
         $driver = config("cache.stores.$store.driver");
