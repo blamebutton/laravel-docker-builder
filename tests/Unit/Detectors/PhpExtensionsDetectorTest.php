@@ -37,7 +37,7 @@ class PhpExtensionsDetectorTest extends TestCase
     {
         return [
             [
-                '1',
+                ['bcmath'],
                 [
                     'cache.default' => 'array',
                     'cache.stores.array.driver' => 'array',
@@ -52,7 +52,7 @@ class PhpExtensionsDetectorTest extends TestCase
                 ],
             ],
             [
-                '0,1',
+                ['apcu', 'bcmath'],
                 [
                     'cache.default' => 'apc',
                     'cache.stores.apc.driver' => 'apc',
@@ -66,7 +66,7 @@ class PhpExtensionsDetectorTest extends TestCase
                 ],
             ],
             [
-                '1,6',
+                ['bcmath', 'redis'],
                 [
                     'cache.default' => 'array',
                     'cache.stores.array.driver' => 'array',
@@ -80,7 +80,7 @@ class PhpExtensionsDetectorTest extends TestCase
                 ],
             ],
             [
-                '1,6',
+                ['bcmath', 'redis'],
                 [
                     'cache.default' => 'array',
                     'cache.stores.array.driver' => 'array',
@@ -94,7 +94,7 @@ class PhpExtensionsDetectorTest extends TestCase
                 ],
             ],
             [
-                '0,1,3',
+                ['apcu', 'bcmath', 'pdo_mysql'],
                 [
                     'cache.default' => 'apc',
                     'cache.stores.apc.driver' => 'apc',
@@ -108,7 +108,7 @@ class PhpExtensionsDetectorTest extends TestCase
                 ],
             ],
             [
-                '1,2,5,6,7',
+                ['bcmath', 'memcached', 'pdo_sqlsrv', 'redis', 'sqlsrv'],
                 [
                     'cache.default' => 'memcached',
                     'cache.stores.memcached.driver' => 'memcached',
@@ -126,7 +126,7 @@ class PhpExtensionsDetectorTest extends TestCase
     }
 
     /** @dataProvider provideConfigurations */
-    public function testItDetectsExtensionsWithoutDuplicates(string $expected, array $config): void
+    public function testItDetectsExtensionsWithoutDuplicates(array $expected, array $config): void
     {
         config()->set($config);
 

@@ -4,5 +4,5 @@ namespace BlameButton\LaravelDockerBuilder\Detectors;
 
 interface DetectorContract
 {
-    public function detect(): string|false;
+    public function detect(): array|string|false;
 }
