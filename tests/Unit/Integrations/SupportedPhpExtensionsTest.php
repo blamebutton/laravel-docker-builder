@@ -77,7 +77,7 @@ class SupportedPhpExtensionsTest extends TestCase
     public function testItReturnsFalseOnError(): void
     {
         Http::fake([
-            'github.com/*' => Http::response("bcmath\nmemcached", 500),
+            'github.com/*' => Http::response("bcmath\nmemcached\n", 500),
         ]);
 
         $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
