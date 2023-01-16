@@ -20,7 +20,7 @@ class PhpExtensionsDetector implements DetectorContract
         return $this;
     }
 
-    public function detect(): string
+    public function detect(): array
     {
         $extensions = [
             $this->getDefaultExtensions(),
@@ -36,9 +36,8 @@ class PhpExtensionsDetector implements DetectorContract
             ->unique()
             ->sort()
             ->intersect($this->supported())
-            ->map(fn (string $extension) => array_search($extension, $this->supported()))
-            ->filter(fn ($value) => is_int($value))
-            ->join(',');
+            ->values()
+            ->toArray();
     }
 
     /**

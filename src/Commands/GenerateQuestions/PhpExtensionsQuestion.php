@@ -42,19 +42,18 @@ class PhpExtensionsQuestion extends BaseQuestion
             ->detect();
 
         if ($command->option('detect')) {
-            $detected = explode(',', $detected);
-
-            foreach ($detected as $key => $value) {
-                $detected[$key] = $supported[$value];
-            }
-
             return $detected;
         }
+
+        $default = collect($detected)
+            ->map(fn($extension) => array_search($extension, $supported))
+            ->where(fn($key) => is_int($key))
+            ->join(',');
 
         return $command->choice(
             question: 'PHP extensions',
             choices: $supported,
-            default: $detected,
+            default: $default,
             multiple: true,
         );
     }

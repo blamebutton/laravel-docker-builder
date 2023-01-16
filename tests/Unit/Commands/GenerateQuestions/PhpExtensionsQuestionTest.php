@@ -73,7 +73,7 @@ class PhpExtensionsQuestionTest extends TestCase
                 ->andReturnSelf();
             $mock->shouldReceive('detect')
                 ->once()
-                ->andReturn('0,1');
+                ->andReturn(['bcmath', 'pdo_mysql']);
         });
 
         $mock = $this->createMock(BaseCommand::class);
@@ -103,7 +103,7 @@ class PhpExtensionsQuestionTest extends TestCase
                 ->andReturnSelf();
             $mock->shouldReceive('detect')
                 ->once()
-                ->andReturn('');
+                ->andReturn([]);
         });
 
         $mock = $this->createMock(BaseCommand::class);
