@@ -3,7 +3,6 @@
 namespace BlameButton\LaravelDockerBuilder\Integrations;
 
 use Illuminate\Support\Facades\Http;
-use function Symfony\Component\String\b;
 
 class SupportedPhpExtensions
 {
@@ -13,7 +12,7 @@ class SupportedPhpExtensions
 
     public function get(string $phpVersion = null): array
     {
-        if (!is_null($this->cache)) {
+        if (! is_null($this->cache)) {
             return $this->cache;
         }
 
@@ -24,8 +23,8 @@ class SupportedPhpExtensions
         }
 
         return $this->cache = collect($contents)
-            ->filter(fn(string $extension): bool => is_null($phpVersion) || str($extension)->contains($phpVersion))
-            ->map(fn(string $extension): string => str($extension)->trim()->before(' '))
+            ->filter(fn (string $extension): bool => is_null($phpVersion) || str($extension)->contains($phpVersion))
+            ->map(fn (string $extension): string => str($extension)->trim()->before(' '))
             ->filter()
             ->values()
             ->toArray();
@@ -34,7 +33,7 @@ class SupportedPhpExtensions
     public function fetch(): array|false
     {
         $response = rescue(
-            callback: fn() => Http::get(self::URL),
+            callback: fn () => Http::get(self::URL),
             rescue: false,
         );
 

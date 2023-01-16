@@ -133,7 +133,6 @@ class PhpExtensionsDetectorTest extends TestCase
         $detected = app(PhpExtensionsDetector::class)->detect();
 
         self::assertEquals($expected, $detected);
-
     }
 
     public function testItReturnsDefaultExtensions(): void

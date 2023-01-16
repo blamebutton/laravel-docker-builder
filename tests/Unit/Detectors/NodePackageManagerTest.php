@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Detectors;
 
 use BlameButton\LaravelDockerBuilder\Detectors\NodePackageManagerDetector;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
+use Illuminate\Support\Facades\File;
 
 /**
  * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -17,10 +18,10 @@ class NodePackageManagerTest extends TestCase
     {
         parent::setUp();
 
-        collect(['package-lock.json', 'yarn.lock'])
-            ->map(fn ($file) => base_path($file))
-            ->filter(fn ($file) => file_exists($file))
-            ->each(fn ($file) => unlink($file));
+        File::delete([
+            base_path('package-lock.json'),
+            base_path('yarn.lock'),
+        ]);
     }
 
     public function providePathMappings(): array

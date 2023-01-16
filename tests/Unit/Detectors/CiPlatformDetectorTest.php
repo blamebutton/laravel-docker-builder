@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Detectors;
 
 use BlameButton\LaravelDockerBuilder\Detectors\CiPlatformDetector;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
+use Illuminate\Support\Facades\File;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -16,33 +17,22 @@ class CiPlatformDetectorTest extends TestCase
     {
         parent::setUp();
 
-        if (! is_dir($path = base_path('.git'))) {
-            mkdir($path);
-        }
-
-        if (file_exists($path = base_path('.git/config'))) {
-            unlink($path);
-        }
+        File::ensureDirectoryExists(base_path('.git'));
+        File::delete(base_path('.git/config'));
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
 
-        if (file_exists($path = base_path('.git/config'))) {
-            unlink($path);
-        }
-
-        if (is_dir($path = base_path('.git'))) {
-            rmdir($path);
-        }
+        File::deleteDirectory(base_path('.git'));
     }
 
     public function testItDetectsGitHub(): void
     {
-        file_put_contents(
-            filename: base_path('.git/config'),
-            data: "[remote \"origin\"]\n\turl = git@github.com:blamebutton/laravel-docker-builder.git",
+        File::put(
+            path: base_path('.git/config'),
+            contents: "[remote \"origin\"]\n\turl = git@github.com:blamebutton/laravel-docker-builder.git",
         );
 
         $detected = app(CiPlatformDetector::class)->detect();
@@ -52,9 +42,9 @@ class CiPlatformDetectorTest extends TestCase
 
     public function testItDetectsGitLab(): void
     {
-        file_put_contents(
-            filename: base_path('.git/config'),
-            data: "[remote \"origin\"]\n\turl = git@gitlab.com:blamebutton/laravel-docker-builder.git",
+        File::put(
+            path: base_path('.git/config'),
+            contents: "[remote \"origin\"]\n\turl = git@gitlab.com:blamebutton/laravel-docker-builder.git",
         );
 
         $detected = app(CiPlatformDetector::class)->detect();
@@ -64,9 +54,9 @@ class CiPlatformDetectorTest extends TestCase
 
     public function testItReturnsFalseWithNoMatches(): void
     {
-        file_put_contents(
-            filename: base_path('.git/config'),
-            data: "[remote \"origin\"]\n\turl = git@bitbucket.com:blamebutton/laravel-docker-builder.git",
+        File::put(
+            path: base_path('.git/config'),
+            contents: "[remote \"origin\"]\n\turl = git@bitbucket.com:blamebutton/laravel-docker-builder.git",
         );
 
         $detected = app(CiPlatformDetector::class)->detect();

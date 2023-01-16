@@ -15,6 +15,7 @@ use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuesti
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 use BlameButton\LaravelDockerBuilder\Objects\Configuration;
 use BlameButton\LaravelDockerBuilder\Traits\InteractsWithTwig;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Input\InputOption;
 
 class DockerGenerateCommand extends BaseCommand
@@ -115,7 +116,10 @@ class DockerGenerateCommand extends BaseCommand
             $dockerfile = sprintf('%s/%s', $dir, $file);
 
             // Save Dockerfile contents
-            file_put_contents($dockerfile, $content);
+            File::put(
+                path: $dockerfile,
+                contents: $content,
+            );
 
             // Output saved Dockerfile location
             $filename = str($dockerfile)->after(base_path())->trim('/');

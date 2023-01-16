@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Commands;
 
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\CiPlatform;
 use BlameButton\LaravelDockerBuilder\Detectors\CiPlatformDetector;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Input\InputArgument;
 
 class DockerCiCommand extends BaseCommand
@@ -34,7 +35,7 @@ class DockerCiCommand extends BaseCommand
         if (CiPlatform::GITLAB_CI === $platform) {
             $output = base_path('.gitlab-ci.yml');
 
-            if (file_exists($output)) {
+            if (File::isFile($output)) {
                 $this->info('Detected GitLab, but [.gitlab-ci.yml] file already exists.');
 
                 return self::SUCCESS;
@@ -42,7 +43,7 @@ class DockerCiCommand extends BaseCommand
 
             $this->info(sprintf('Detected GitLab, copying [.gitlab-ci.yml] to [%s].', dirname($output)));
 
-            copy(package_path('resources/templates/.gitlab-ci.yml'), $output);
+            File::copy(package_path('resources/templates/.gitlab-ci.yml'), $output);
         }
 
         return self::SUCCESS;

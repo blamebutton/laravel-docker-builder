@@ -3,6 +3,7 @@
 namespace BlameButton\LaravelDockerBuilder\Detectors;
 
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\CiPlatform;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class CiPlatformDetector implements DetectorContract
@@ -11,11 +12,11 @@ class CiPlatformDetector implements DetectorContract
     {
         $config = base_path('.git/config');
 
-        if (! file_exists($config)) {
+        if (File::missing($config)) {
             return false;
         }
 
-        $config = file_get_contents($config);
+        $config = File::get($config);
 
         if (Str::contains($config, 'gitlab')) {
             return CiPlatform::GITLAB_CI;

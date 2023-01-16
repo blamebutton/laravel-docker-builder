@@ -5,6 +5,7 @@ namespace BlameButton\LaravelDockerBuilder\Detectors;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
 use Composer\Semver\VersionParser;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class PhpVersionDetector implements DetectorContract
@@ -36,6 +37,10 @@ class PhpVersionDetector implements DetectorContract
 
     public function getComposerFileContents(): string|false
     {
-        return file_get_contents(base_path('composer.json'));
+        if (File::missing($path = base_path('composer.json'))) {
+            return false;
+        }
+
+        return File::get($path);
     }
 }

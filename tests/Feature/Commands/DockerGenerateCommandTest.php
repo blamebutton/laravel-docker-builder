@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Feature\Commands;
 
 use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
+use Illuminate\Support\Facades\File;
 use Mockery\MockInterface;
 
 /**
@@ -71,6 +72,8 @@ class DockerGenerateCommandTest extends TestCase
     /** @dataProvider provideCommands */
     public function testItGeneratesConfigurations(array $expected, string $command): void
     {
+        File::deleteDirectory(base_path('.docker'));
+
         $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
             $mock->shouldReceive('get')->withAnyArgs()->andReturn([
                 'bcmath', 'pdo_mysql', 'pdo_pgsql', 'redis', 'apcu',
@@ -86,7 +89,16 @@ class DockerGenerateCommandTest extends TestCase
         }
     }
 
-    public function testItAsksQuestions(): void
+    public function provideIsInformationCorrectAnswer(): array
+    {
+        return [
+            ['yes'],
+            ['no'],
+        ];
+    }
+
+    /** @dataProvider provideIsInformationCorrectAnswer */
+    public function testItAsksQuestions(string $isCorrect): void
     {
         $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
             $mock->shouldReceive('get')->with('8.2')->once()->andReturn(['bcmath', 'redis']);
@@ -100,18 +112,23 @@ class DockerGenerateCommandTest extends TestCase
         $command->expectsConfirmation('Do you want to use "Alpine Linux" based images?', 'yes');
         $command->expectsChoice('Which Node package manager do you use?', 'npm', ['npm', 'yarn', 'none']);
         $command->expectsChoice('Which Node build tool do you use?', 'vite', ['vite', 'mix']);
-        $command->expectsConfirmation('Does this look correct?', 'yes');
-        $command->expectsOutput('Configuration:');
-        $command->expectsTable(['Key', 'Value'], [
-            ['PHP version', '8.2'],
-            ['PHP extensions', 'bcmath, redis'],
-            ['Artisan Optimize', 'true'],
-            ['Alpine images', 'true'],
-            ['Node package manager', 'NPM'],
-            ['Node build tool', 'Vite.js'],
-        ]);
-        $command->expectsOutput('Command to generate above configuration:');
-        $command->expectsOutput('  php artisan docker:generate -n -p 8.2 -e bcmath,redis -o -a -m npm -b vite');
+        $command->expectsConfirmation('Does this look correct?', $isCorrect);
+        if ($isCorrect == 'yes') {
+            $command->expectsOutput('Configuration:');
+            $command->expectsTable(['Key', 'Value'], [
+                ['PHP version', '8.2'],
+                ['PHP extensions', 'bcmath, redis'],
+                ['Artisan Optimize', 'true'],
+                ['Alpine images', 'true'],
+                ['Node package manager', 'NPM'],
+                ['Node build tool', 'Vite.js'],
+            ]);
+            $command->expectsOutput('Command to generate above configuration:');
+            $command->expectsOutput('  php artisan docker:generate -n -p 8.2 -e bcmath,redis -o -a -m npm -b vite');
+        } else {
+            $command->expectsOutput('Exiting.');
+        }
+        $command->assertSuccessful();
     }
 
     public function provideInvalidOptions(): array

@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Detectors;
 
 use BlameButton\LaravelDockerBuilder\Detectors\NodeBuildToolDetector;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
+use Illuminate\Support\Facades\File;
 
 /**
  * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -17,10 +18,11 @@ class NodeBuildToolDetectorTest extends TestCase
     {
         parent::setUp();
 
-        collect(['vite.config.js', 'vite.config.ts', 'webpack.mix.js'])
-            ->map(fn ($file) => base_path($file))
-            ->filter(fn ($file) => file_exists($file))
-            ->each(fn ($file) => unlink($file));
+        File::delete([
+            base_path('vite.config.js'),
+            base_path('vite.config.ts'),
+            base_path('webpack.mix.js'),
+        ]);
     }
 
     public function providePathMappings(): array
