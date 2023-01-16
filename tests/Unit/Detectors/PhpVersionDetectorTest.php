@@ -84,4 +84,13 @@ class PhpVersionDetectorTest extends TestCase
 
         self::assertEquals('laravel/laravel', data_get($json, 'name'));
     }
+
+    public function testItReturnsFalseOnMissingComposerFile(): void
+    {
+        $this->app->setBasePath('non-existent');
+
+        $detected = app(PhpVersionDetector::class)->getComposerFileContents();
+
+        self::assertFalse($detected);
+    }
 }
