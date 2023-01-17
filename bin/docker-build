@@ -14,7 +14,7 @@ PHP_TAG="${DOCKER_PHP_TAG}"
 
 if ! [[ -f "${PWD}/.dockerignore" ]]; then
   echo "Missing [/.dockerignore], copying to [${PWD}/.dockerignore]";
-  cp "${PACKAGE}/docker/.dockerignore" "${PWD}/.dockerignore"
+  cp "${PACKAGE}/resources/templates/.dockerignore" "${PWD}/.dockerignore"
 fi
 
 docker build \
