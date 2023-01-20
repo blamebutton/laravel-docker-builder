@@ -38,6 +38,17 @@ use Mockery\MockInterface;
  */
 class DockerGenerateCommandTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
+            $mock->shouldReceive('get')->withAnyArgs()->andReturn([
+                'bcmath', 'pdo_mysql', 'pdo_pgsql', 'redis', 'apcu',
+            ]);
+        });
+    }
+
     public function provideCommands(): array
     {
         return [
@@ -46,7 +57,8 @@ class DockerGenerateCommandTest extends TestCase
                     "FROM php:8.2-fpm-alpine AS composer\n",
                     "FROM node:lts-alpine AS node\n",
                     'COPY /package.json /package-lock.json /app/',
-                    "COPY /vite.config.js /app/\n",
+                    'COPY /package.json /package-lock.json /app/',
+                    "npm ci\n",
                     "RUN npm run build\n",
                     "RUN install-php-extensions bcmath pdo_pgsql redis\n",
                     "COPY --from=node /app/public/build/ /app/public/build/\n",
@@ -60,7 +72,8 @@ class DockerGenerateCommandTest extends TestCase
                     "FROM php:8.1-fpm AS composer\n",
                     "FROM node:lts AS node\n",
                     'COPY /package.json /yarn.lock /app/',
-                    "COPY /webpack.mix.js /app/\n",
+                    "RUN yarn install\n",
+                    "COPY /*.js /*.ts /app/\n",
                     "RUN yarn run production\n",
                     "RUN install-php-extensions bcmath pdo_mysql apcu\n",
                     "COPY --from=node /app/public/css/ /app/public/css/\n",
@@ -78,12 +91,6 @@ class DockerGenerateCommandTest extends TestCase
     public function testItGeneratesConfigurations(array $expected, string $command): void
     {
         File::deleteDirectory(base_path('.docker'));
-
-        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
-            $mock->shouldReceive('get')->withAnyArgs()->andReturn([
-                'bcmath', 'pdo_mysql', 'pdo_pgsql', 'redis', 'apcu',
-            ]);
-        });
 
         $this->artisan($command);
 
@@ -161,10 +168,6 @@ class DockerGenerateCommandTest extends TestCase
     /** @dataProvider provideInvalidOptions */
     public function testItThrowsExceptions(string $expected, string $command): void
     {
-        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
-            $mock->shouldReceive('get')->withAnyArgs()->andReturn(['bcmath']);
-        });
-
         $command = $this->artisan($command);
         $command->expectsOutput($expected);
         $command->assertFailed();
