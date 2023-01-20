@@ -18,7 +18,7 @@ COPY /resources/ /app/resources/
 
 {# build assets #}
 {% if node_build_tool == 'vite' %}
-COPY /vite.config.js /app/
+COPY /*.js /*.ts /app/
 {# build with vite #}
 {% if node_package_manager == 'npm' %}
 RUN npm run build
@@ -26,7 +26,7 @@ RUN npm run build
 RUN yarn run build
 {% endif %}
 {% elseif node_build_tool == 'mix' %}
-COPY /webpack.mix.js /app/
+COPY /*.js /*.ts /app/
 {# build with mix #}
 {% if node_package_manager == 'npm' %}
 RUN npm run production
