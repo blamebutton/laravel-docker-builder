@@ -1,4 +1,4 @@
 /.coverage
+/.phpunit.cache
 /vendor
-/.phpunit.result.cache
 /composer.lock
