@@ -19,17 +19,14 @@ WORKDIR /app
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions {{ php_extensions }}
 
-# copy application source code
-COPY / /app
+# copy dependencies from composer installation step
+COPY --chown=www-data:www-data --from=composer /app/vendor/ /app/vendor/
 
 {# import node-copy-assets partial, copy assets from node layer #}
 {% include 'partials/node-copy-assets.dockerfile.twig' %}
 
-# copy dependencies from composer installation step
-COPY --from=composer /app/vendor/ /app/vendor/
-
-# make storage writable for application
-RUN chown --recursive www-data:www-data /app/storage
+# copy application source code
+COPY --chown=www-data:www-data / /app
 
 {% if artisan_optimize %}
 # optimize application before start

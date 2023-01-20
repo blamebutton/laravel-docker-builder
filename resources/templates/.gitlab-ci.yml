@@ -1,4 +1,4 @@
-docker-build:
+.docker-build:
   # Use the official docker image.
   image: docker:latest
   stage: build
@@ -11,19 +11,32 @@ docker-build:
   script:
     - |
       if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-        tag=""
+        TAG=""
         echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
       else
-        tag=":$CI_COMMIT_REF_SLUG"
+        TAG=":$CI_COMMIT_REF_SLUG"
         echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
       fi
-    - docker build --pull -f .docker/nginx.dockerfile -t "$CI_REGISTRY_IMAGE/nginx${tag}" .
-    - docker build --pull -f .docker/php.dockerfile -t "$CI_REGISTRY_IMAGE/php${tag}" .
-    - docker push "$CI_REGISTRY_IMAGE/nginx${tag}"
-    - docker push "$CI_REGISTRY_IMAGE/php${tag}"
+    - docker pull "$CI_REGISTRY_IMAGE/${NAME}${TAG}" || true
+    - docker build --pull -f .docker/${NAME}.dockerfile --cache-from "$CI_REGISTRY_IMAGE/${NAME}${TAG}" -t "$CI_REGISTRY_IMAGE/${NAME}${TAG}" .
+    - docker push "$CI_REGISTRY_IMAGE/${NAME}${TAG}"
   # Run this job in a branch where a Dockerfile exists
   rules:
     - if: $CI_COMMIT_BRANCH
       exists:
-        - .docker/nginx.dockerfile
-        - .docker/php.dockerfile
+        - .docker/$NAME.dockerfile
+
+docker-build-nginx:
+  extends: .docker-build
+  variables:
+    NAME: nginx
+
+docker-build-php:
+  extends: .docker-build
+  variables:
+    NAME: php
+
+docker-build-ssr:
+  extends: .docker-build
+  variables:
+    NAME: ssr

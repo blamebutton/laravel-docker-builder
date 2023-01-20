@@ -1,22 +1,17 @@
-/*
+# Laravel
+/bootstrap/cache/*
+/public/build/
+/public/storage/
+/storage/*
 
-/node_modules
-/vendor
+# Development
+/tests/
+/phpunit.xml
 
-!/app
-!/bootstrap/cache/.gitignore
-!/bootstrap/app.php
-!/config
-!/database
-!/lang
-!/public
-!/resources
-!/routes
-!/storage
+# Dependencies
+/node_modules/
+/vendor/
 
-!/artisan
-!/composer.json
-!/composer.lock
-!/package.json
-!/package-lock.json
-!/vite.config.js
+# Docker
+/.docker/
+/docker-compose.yml
