@@ -2,6 +2,11 @@
 
 namespace BlameButton\LaravelDockerBuilder\Tests\Feature\Commands;
 
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpExtensionsQuestion;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion;
+use BlameButton\LaravelDockerBuilder\Detectors\NodePackageManagerDetector;
 use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Illuminate\Support\Facades\File;
@@ -113,7 +118,7 @@ class DockerGenerateCommandTest extends TestCase
         $command->expectsChoice('Which Node package manager do you use?', 'npm', ['npm', 'yarn', 'none']);
         $command->expectsChoice('Which Node build tool do you use?', 'vite', ['vite', 'mix']);
         $command->expectsConfirmation('Does this look correct?', $isCorrect);
-        if ($isCorrect == 'yes') {
+        if ($isCorrect === 'yes') {
             $command->expectsOutput('Configuration:');
             $command->expectsTable(['Key', 'Value'], [
                 ['PHP version', '8.2'],
@@ -163,5 +168,28 @@ class DockerGenerateCommandTest extends TestCase
         $command = $this->artisan($command);
         $command->expectsOutput($expected);
         $command->assertFailed();
+    }
+
+    public function testItAcceptsNodePackageManagerNone(): void
+    {
+        $this->mock(PhpVersionQuestion::class, function (MockInterface $mock) {
+            $mock->shouldReceive('getAnswer')->once()->andReturn('8.2');
+        });
+        $this->mock(PhpExtensionsQuestion::class, function (MockInterface $mock) {
+            $mock->shouldReceive('getAnswer')->once()->andReturn(['bcmath']);
+        });
+        $this->mock(ArtisanOptimizeQuestion::class, function (MockInterface $mock) {
+            $mock->shouldReceive('getAnswer')->once()->andReturn(true);
+        });
+        $this->mock(AlpineQuestion::class, function (MockInterface $mock) {
+            $mock->shouldReceive('getAnswer')->once()->andReturn(true);
+        });
+        $this->mock(NodePackageManagerDetector::class, function (MockInterface $mock) {
+            $mock->shouldReceive('detect')->once()->andReturn(false);
+        });
+
+        $this->artisan('docker:generate', ['--detect' => true])
+            ->expectsChoice('Which Node package manager do you use?', 'none', ['npm', 'yarn', 'none'])
+            ->expectsConfirmation('Does this look correct?', 'yes');
     }
 }

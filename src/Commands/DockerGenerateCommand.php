@@ -79,7 +79,7 @@ class DockerGenerateCommand extends BaseCommand
                 '<comment>'.json_encode($config->isAlpine()).'</comment>',
             ],
             ['Node package manager',
-                NodePackageManager::name($config->getNodePackageManager()),
+                $config->getNodePackageManager() ? NodePackageManager::name($config->getNodePackageManager()) : 'None',
             ],
             ['Node build tool',
                 $config->getNodePackageManager()
