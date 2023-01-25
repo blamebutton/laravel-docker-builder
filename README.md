@@ -10,7 +10,7 @@
 * Detect PHP version and extensions
 * Bundle assets with Vite.js or Laravel Mix
 * Separate NGINX and PHP-FPM images
-* Deployment examples for Kubernetes and Docker Compose
+* [Deployment examples](/.examples/) for Kubernetes and Docker Compose
 
 ## Installation
 
