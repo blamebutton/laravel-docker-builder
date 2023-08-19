@@ -10,7 +10,7 @@ use Twig\Loader\FilesystemLoader;
 
 trait InteractsWithTwig
 {
-    private TwigEnvironment|null $twig = null;
+    private ?TwigEnvironment $twig = null;
 
     public function twig(): TwigEnvironment
     {
@@ -27,9 +27,7 @@ trait InteractsWithTwig
     /**
      * Render a Twig template.
      *
-     * @param  string  $name
      * @param  array<string, mixed>  $context
-     * @return string
      *
      * @throws LoaderError  when the template cannot be found
      * @throws SyntaxError  when an error occurred during compilation

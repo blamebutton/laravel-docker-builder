@@ -5,12 +5,7 @@ namespace BlameButton\LaravelDockerBuilder\Objects;
 class Configuration
 {
     /**
-     * @param  string  $phpVersion
      * @param  string[]  $phpExtensions
-     * @param  bool  $artisanOptimize
-     * @param  bool  $alpine
-     * @param  string|false  $nodePackageManager
-     * @param  string|false  $nodeBuildTool
      */
     public function __construct(
         private string $phpVersion,

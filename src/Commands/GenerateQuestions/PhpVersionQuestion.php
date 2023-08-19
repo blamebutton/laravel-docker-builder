@@ -13,8 +13,6 @@ class PhpVersionQuestion extends BaseQuestion
      * Get the PHP version, either by detecting it from the "composer.json",
      * from the "php-version" option, or asking the user.
      *
-     * @param  BaseCommand  $command
-     * @return string
      *
      * @throws InvalidOptionValueException when an unsupported PHP version is passed
      */

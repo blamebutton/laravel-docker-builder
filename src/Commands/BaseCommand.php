@@ -11,10 +11,7 @@ abstract class BaseCommand extends Command
     /**
      * Ask an optional question with a "none" option.
      *
-     * @param  string  $question
      * @param  string[]  $choices
-     * @param  string|null  $default
-     * @return string|false
      */
     public function optionalChoice(string $question, array $choices, string $default = null): string|false
     {

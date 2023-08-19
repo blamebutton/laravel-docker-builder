@@ -13,8 +13,6 @@ class NodeBuildToolQuestion extends BaseQuestion
      * Get the Node Build Tool, either by detecting it from files present (vite.config.js, webpack.mix.js),
      * from the "node-build-tool" option, or asking the user.
      *
-     * @param  BaseCommand  $command
-     * @return string
      *
      * @throws InvalidOptionValueException
      */

@@ -13,9 +13,6 @@ class PhpExtensionsQuestion extends BaseQuestion
      * Get the PHP extensions, either by detecting them from the application's configuration,
      * from the "php-extensions" option, or asking the user.
      *
-     * @param  BaseCommand  $command
-     * @param  string  $phpVersion
-     * @return array
      *
      * @throws InvalidOptionValueException when an unsupported extension is passed
      */
