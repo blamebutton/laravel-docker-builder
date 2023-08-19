@@ -27,24 +27,45 @@ class DockerCiCommand extends BaseCommand
 
         $detected = app(CiPlatformDetector::class)->detect();
 
-        return self::SUCCESS;
+        if ($detected) {
+            return $this->copy($detected);
+        }
+
+        $this->warn('Unfortunately, no CI platform could be detected.');
+        $this->warn('Please use the [ci-platform] argument to manually define a supported platform.');
+
+        return self::FAILURE;
     }
 
     protected function copy(string $platform): int
     {
-        if (CiPlatform::GITLAB_CI === $platform) {
+        if (CiPlatform::GITHUB_ACTIONS === $platform) {
+            $template = package_path('resources/templates/ci-platforms/github-workflow.yml');
+            $output = base_path('.github/workflows/ci.yml');
+        } elseif (CiPlatform::GITLAB_CI === $platform) {
+            $template = package_path('resources/templates/ci-platforms/.gitlab-ci.yml');
             $output = base_path('.gitlab-ci.yml');
+        } else {
+            $this->error('Invalid platform passed to '.__METHOD__.' this should never happen.');
 
-            if (File::isFile($output)) {
-                $this->info('Detected GitLab, but [.gitlab-ci.yml] file already exists.');
-
-                return self::SUCCESS;
-            }
-
-            $this->info(sprintf('Detected GitLab, copying [.gitlab-ci.yml] to [%s].', dirname($output)));
-
-            File::copy(package_path('resources/templates/.gitlab-ci.yml'), $output);
+            return self::INVALID;
         }
+
+        $fromBasePath = str($output)->after(base_path().'/')->value();
+
+        if (File::isFile($output)) {
+            $this->info(sprintf(
+                'Using [%s], but [%s] file already exists.',
+                CiPlatform::name($platform),
+                $fromBasePath,
+            ));
+
+            return self::SUCCESS;
+        }
+
+        $this->info(sprintf('Using [%s], copying [%s] to [%s].', CiPlatform::name($platform), $fromBasePath, dirname($output)));
+
+        File::copy($template, $output);
 
         return self::SUCCESS;
     }

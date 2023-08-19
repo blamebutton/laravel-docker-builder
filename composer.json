@@ -30,7 +30,9 @@
     "twig/twig": "^3.0"
   },
   "require-dev": {
+    "brianium/paratest": "^6.10",
     "laravel/pint": "^1.4",
+    "nunomaduro/collision": "^6.2",
     "orchestra/testbench": "^7.19"
   },
   "autoload": {
@@ -59,6 +61,6 @@
     }
   },
   "scripts": {
-    "coverage": "php -d pcov.enabled=1 -d pcov.directory=src -d pcov.exclude='~vendor~' vendor/bin/phpunit"
+    "coverage": "XDEBUG_MODE=coverage php -d pcov.enabled=1 -d pcov.directory=src -d pcov.exclude='~vendor~' vendor/bin/testbench package:test --parallel --coverage"
   }
 }
