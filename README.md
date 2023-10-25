@@ -1,8 +1,8 @@
+![Banner](https://banners.beyondco.de/Laravel%20Docker%20Builder.png?theme=light&packageManager=composer+require&packageName=blamebutton%2Flaravel-docker-builder&pattern=architect&style=style_1&description=Create+Dockerfiles+and+Kubernetes+manifests+for+your+application&md=1&showWatermark=1&fontSize=100px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg&widths=auto)
+
 [![Packagist Version](https://img.shields.io/packagist/v/blamebutton/laravel-docker-builder)](https://packagist.org/packages/blamebutton/laravel-docker-builder)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/blamebutton/laravel-docker-builder)](https://packagist.org/packages/blamebutton/laravel-docker-builder)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blamebutton/laravel-docker-builder/phpunit.yml)
-
-# Laravel Docker Builder
 
 ## Features
 
