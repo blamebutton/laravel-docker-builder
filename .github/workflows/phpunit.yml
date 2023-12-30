@@ -11,8 +11,8 @@ on:
 
 jobs:
   phpunit:
-    name: "P{{ matrix.php }} - L{{ matrix.laravel }} - {{ matrix.dependency-versions }} - {{ matrix.os }}"
-    runs-on: "{{ matrix.os }}"
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    runs-on: "${{ matrix.os }}"
     timeout-minutes: 5
 
     strategy:
