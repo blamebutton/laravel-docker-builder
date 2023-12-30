@@ -1,7 +1,6 @@
 {
   "name": "blamebutton/laravel-docker-builder",
   "description": "Production ready Docker files for Laravel",
-  "license": "MIT",
   "type": "library",
   "keywords": [
     "laravel",
@@ -10,6 +9,8 @@
     "generate",
     "kubernetes"
   ],
+  "homepage": "https://github.com/blamebutton/laravel-docker-builder",
+  "license": "MIT",
   "authors": [
     {
       "name": "Bram Ceulemans",
@@ -17,7 +18,6 @@
       "homepage": "https://github.com/bram-pkg"
     }
   ],
-  "homepage": "https://github.com/blamebutton/laravel-docker-builder",
   "support": {
     "issues": "https://github.com/blamebutton/laravel-docker-builder/issues",
     "source": "https://github.com/blamebutton/laravel-docker-builder"
@@ -48,10 +48,14 @@
       "BlameButton\\LaravelDockerBuilder\\Tests\\": "tests/"
     }
   },
+  "minimum-stability": "dev",
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true
+  },
+  "scripts": {
+    "coverage": "XDEBUG_MODE=coverage php -d pcov.enabled=1 -d pcov.directory=src -d pcov.exclude='~vendor~' vendor/bin/testbench package:test --coverage"
   },
   "extra": {
     "laravel": {
@@ -59,8 +63,5 @@
         "BlameButton\\LaravelDockerBuilder\\DockerServiceProvider"
       ]
     }
-  },
-  "scripts": {
-    "coverage": "XDEBUG_MODE=coverage php -d pcov.enabled=1 -d pcov.directory=src -d pcov.exclude='~vendor~' vendor/bin/testbench package:test --coverage"
   }
 }
