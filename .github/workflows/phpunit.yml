@@ -22,8 +22,10 @@ jobs:
         include:
           - laravel: '9.*'
             testbench: '7.*'
+            carbon: '2.*'
           - laravel: '10.*'
             testbench: '8.*'
+            carbon: '2.*'
         exclude:
           - laravel: '11.*'
             php: '8.0'
