@@ -18,13 +18,13 @@ class HelpersTest extends TestCase
     {
         $path = package_path();
 
-        self::assertEquals(dirname(__FILE__, 3), $path);
+        self::assertEquals(dirname(__FILE__, 2), $path);
     }
 
     public function testItReturnsPackagePathSubPath(): void
     {
         $path = package_path('composer.json');
 
-        self::assertEquals(dirname(__FILE__, 3).'/composer.json', $path);
+        self::assertEquals(dirname(__FILE__, 2).'/composer.json', $path);
     }
 }
