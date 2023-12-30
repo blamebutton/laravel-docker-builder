@@ -11,7 +11,6 @@ on:
 
 jobs:
   phpunit:
-    runs-on: ${{ matrix.os }}
     timeout-minutes: 5
     strategy:
       fail-fast: true
@@ -29,6 +28,7 @@ jobs:
           - laravel: '11.*'
             php: '8.0'
 
+    runs-on: ${{ matrix.os }}
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
     steps:
