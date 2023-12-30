@@ -1,5 +1,11 @@
-/.coverage
-/.phpunit.cache
-/.phpunit.result.cache
-/vendor
-/composer.lock
+.idea
+.phpunit.cache
+build
+composer.lock
+coverage
+docs
+phpunit.xml
+phpstan.neon
+testbench.yaml
+vendor
+node_modules

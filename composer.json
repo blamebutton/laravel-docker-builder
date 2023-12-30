@@ -27,13 +27,13 @@
     "composer/semver": "^3.3",
     "guzzlehttp/guzzle": "^7.5",
     "illuminate/contracts": "^10.0 | ^11.0",
-    "phpunit/phpunit": "^10.0",
     "twig/twig": "^3.0"
   },
   "require-dev": {
     "laravel/pint": "^1.13.7",
     "nunomaduro/collision": "^7.0 | ^8.0",
-    "orchestra/testbench": "^8.19 | ^9.0"
+    "orchestra/testbench": "^8.19 | ^9.0",
+    "pestphp/pest": "3.x-dev"
   },
   "autoload": {
     "psr-4": {
@@ -52,7 +52,10 @@
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   },
   "scripts": {
     "post-autoload-dump": "@composer run prepare",
