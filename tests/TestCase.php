@@ -21,4 +21,9 @@ abstract class TestCase extends Orchestra
             DockerServiceProvider::class,
         ];
     }
+
+    public function getEnvironmentSetUp($app): void
+    {
+        config()->set('database.default', 'testing');
+    }
 }
