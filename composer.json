@@ -23,17 +23,17 @@
     "source": "https://github.com/blamebutton/laravel-docker-builder"
   },
   "require": {
-    "php": "^8.0",
+    "php": "^8.1",
     "composer/semver": "^3.3",
     "guzzlehttp/guzzle": "^7.5",
-    "illuminate/contracts": "^9.0 | ^10.0 | ^11.0",
+    "illuminate/contracts": "^10.0 | ^11.0",
+    "phpunit/phpunit": "^10.0",
     "twig/twig": "^3.0"
   },
   "require-dev": {
     "laravel/pint": "^1.13.7",
-    "nunomaduro/collision": "^6.4 || ^7.0",
-    "orchestra/testbench": "^8.19",
-    "phpunit/phpunit": "^10.5.5"
+    "nunomaduro/collision": "^7.0",
+    "orchestra/testbench": "^8.19"
   },
   "autoload": {
     "psr-4": {
