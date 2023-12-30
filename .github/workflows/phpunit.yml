@@ -4,8 +4,8 @@ on:
   push:
     paths:
       - '**.php'
-      - '.github/workflows/run-tests.yml'
-      - 'phpunit.xml.dist'
+      - '.github/workflows/phpunit.yml'
+      - 'phpunit.xml.dist.dist'
       - 'composer.json'
       - 'composer.lock'
 
