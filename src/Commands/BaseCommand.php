@@ -13,7 +13,7 @@ abstract class BaseCommand extends Command
      *
      * @param  string[]  $choices
      */
-    public function optionalChoice(string $question, array $choices, string $default = null): string|false
+    public function optionalChoice(string $question, array $choices, ?string $default = null): string|false
     {
         $choice = $this->choice(
             question: $question,

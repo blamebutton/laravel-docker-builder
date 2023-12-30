@@ -6,6 +6,7 @@ use BlameButton\LaravelDockerBuilder\Detectors\PhpVersionDetector;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Composer\Semver\VersionParser;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -41,7 +42,7 @@ class PhpVersionDetectorTest extends TestCase
         self::assertFalse($detected);
     }
 
-    public function provideVersions(): array
+    public static function provideVersions(): array
     {
         return [
             ['8.2', '^8.2'],
@@ -53,7 +54,7 @@ class PhpVersionDetectorTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideVersions */
+    #[DataProvider('provideVersions')]
     public function testItParsesJsonVersion($expected, string $version): void
     {
         $this->partialMock(PhpVersionDetector::class, function (MockInterface $mock) use ($version) {

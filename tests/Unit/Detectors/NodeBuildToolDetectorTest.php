@@ -5,6 +5,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Detectors;
 use BlameButton\LaravelDockerBuilder\Detectors\NodeBuildToolDetector;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -25,7 +26,7 @@ class NodeBuildToolDetectorTest extends TestCase
         ]);
     }
 
-    public function providePathMappings(): array
+    public static function providePathMappings(): array
     {
         return [
             'vite js' => ['vite', 'vite.config.js'],
@@ -35,7 +36,7 @@ class NodeBuildToolDetectorTest extends TestCase
         ];
     }
 
-    /** @dataProvider providePathMappings */
+    #[DataProvider('providePathMappings')]
     public function testItDetectsPaths(string|bool $expected, string $filename): void
     {
         touch(base_path($filename));

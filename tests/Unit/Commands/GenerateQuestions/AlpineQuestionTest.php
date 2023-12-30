@@ -5,6 +5,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Commands\GenerateQuestions
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -13,7 +14,7 @@ use BlameButton\LaravelDockerBuilder\Tests\TestCase;
  */
 class AlpineQuestionTest extends TestCase
 {
-    private function provideOptions(): array
+    public static function provideOptions(): array
     {
         return [
             'it returns true when detect is true' => [true, null, true],
@@ -23,7 +24,7 @@ class AlpineQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideOptions */
+    #[DataProvider('provideOptions')]
     public function testItHandlesOptionsCorrectly($expected, $alpine, $detect): void
     {
         $mock = $this->createMock(BaseCommand::class);
@@ -41,7 +42,7 @@ class AlpineQuestionTest extends TestCase
         self::assertEquals($expected, $answer);
     }
 
-    private function provideInputs(): array
+    public static function provideInputs(): array
     {
         return [
             'it returns true with true' => [true, true],
@@ -49,7 +50,7 @@ class AlpineQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideInputs */
+    #[DataProvider('provideInputs')]
     public function testItHandlesAnswersCorrectly($expected, $input): void
     {
         $stub = $this->createStub(BaseCommand::class);

@@ -39,10 +39,10 @@ class DockerCiCommand extends BaseCommand
 
     protected function copy(string $platform): int
     {
-        if (CiPlatform::GITHUB_ACTIONS === $platform) {
+        if ($platform === CiPlatform::GITHUB_ACTIONS) {
             $template = package_path('resources/templates/ci-platforms/github-workflow.yml');
             $output = base_path('.github/workflows/ci.yml');
-        } elseif (CiPlatform::GITLAB_CI === $platform) {
+        } elseif ($platform === CiPlatform::GITLAB_CI) {
             $template = package_path('resources/templates/ci-platforms/.gitlab-ci.yml');
             $output = base_path('.gitlab-ci.yml');
         } else {

@@ -6,7 +6,7 @@ use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 
 class PhpExtensions
 {
-    public static function values(string $phpVersion = null): array
+    public static function values(?string $phpVersion = null): array
     {
         return app(SupportedPhpExtensions::class)->get($phpVersion);
     }

@@ -9,6 +9,7 @@ use BlameButton\LaravelDockerBuilder\Detectors\NodeBuildToolDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -32,7 +33,7 @@ class NodeBuildToolQuestionTest extends TestCase
         app(NodeBuildToolQuestion::class)->getAnswer($mock);
     }
 
-    private function provideOptions(): array
+    public static function provideOptions(): array
     {
         return [
             'vite' => [NodeBuildTool::VITE, 'vite'],
@@ -40,7 +41,7 @@ class NodeBuildToolQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideOptions */
+    #[DataProvider('provideOptions')]
     public function testItHandlesOptions($expected, $input): void
     {
         $mock = $this->createMock(BaseCommand::class);
@@ -55,7 +56,7 @@ class NodeBuildToolQuestionTest extends TestCase
         self::assertEquals($expected, $answer);
     }
 
-    public function provideDetectedBuildTools(): array
+    public static function provideDetectedBuildTools(): array
     {
         return [
             'vite' => [NodeBuildTool::VITE, NodeBuildTool::VITE],
@@ -63,7 +64,7 @@ class NodeBuildToolQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideDetectedBuildTools */
+    #[DataProvider('provideDetectedBuildTools')]
     public function testItDetectsBuildTools($expected, $detected): void
     {
         $mock = $this->createMock(BaseCommand::class);
@@ -83,7 +84,7 @@ class NodeBuildToolQuestionTest extends TestCase
         self::assertEquals($expected, $answer);
     }
 
-    public function provideQuestionInput(): array
+    public static function provideQuestionInput(): array
     {
         return [
             'vite' => ['vite', 'vite'],
@@ -91,7 +92,7 @@ class NodeBuildToolQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideQuestionInput */
+    #[DataProvider('provideQuestionInput')]
     public function testItAsksQuestion($expected, $input): void
     {
         $mock = $this->createMock(BaseCommand::class);

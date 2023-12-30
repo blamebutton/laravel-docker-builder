@@ -1,7 +1,7 @@
 <?php
 
 if (! function_exists('package_path')) {
-    function package_path(string $path = null): string
+    function package_path(?string $path = null): string
     {
         $dir = dirname(__FILE__, 2);
 

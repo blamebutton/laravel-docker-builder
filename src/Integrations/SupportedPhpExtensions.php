@@ -10,7 +10,7 @@ class SupportedPhpExtensions
 
     private ?array $cache = null;
 
-    public function get(string $phpVersion = null): array
+    public function get(?string $phpVersion = null): array
     {
         if (! is_null($this->cache)) {
             return $this->cache;

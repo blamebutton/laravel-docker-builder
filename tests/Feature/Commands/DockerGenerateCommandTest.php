@@ -11,6 +11,7 @@ use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Illuminate\Support\Facades\File;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -49,7 +50,7 @@ class DockerGenerateCommandTest extends TestCase
         });
     }
 
-    public function provideCommands(): array
+    public static function provideCommands(): array
     {
         return [
             '8.2, pgsql, redis, optimize, alpine, npm, vite' => [
@@ -87,7 +88,7 @@ class DockerGenerateCommandTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideCommands */
+    #[DataProvider('provideCommands')]
     public function testItGeneratesConfigurations(array $expected, string $command): void
     {
         File::deleteDirectory(base_path('.docker'));
@@ -101,7 +102,7 @@ class DockerGenerateCommandTest extends TestCase
         }
     }
 
-    public function provideIsInformationCorrectAnswer(): array
+    public static function provideIsInformationCorrectAnswer(): array
     {
         return [
             ['yes'],
@@ -109,7 +110,7 @@ class DockerGenerateCommandTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideIsInformationCorrectAnswer */
+    #[DataProvider('provideIsInformationCorrectAnswer')]
     public function testItAsksQuestions(string $isCorrect): void
     {
         $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
@@ -143,7 +144,7 @@ class DockerGenerateCommandTest extends TestCase
         $command->assertSuccessful();
     }
 
-    public function provideInvalidOptions(): array
+    public static function provideInvalidOptions(): array
     {
         return [
             'php version' => [
@@ -165,7 +166,7 @@ class DockerGenerateCommandTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideInvalidOptions */
+    #[DataProvider('provideInvalidOptions')]
     public function testItThrowsExceptions(string $expected, string $command): void
     {
         $command = $this->artisan($command);

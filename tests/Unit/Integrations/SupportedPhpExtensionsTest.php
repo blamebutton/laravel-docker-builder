@@ -6,6 +6,7 @@ use BlameButton\LaravelDockerBuilder\Integrations\SupportedPhpExtensions;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Illuminate\Support\Facades\Http;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -14,7 +15,7 @@ use Mockery\MockInterface;
  */
 class SupportedPhpExtensionsTest extends TestCase
 {
-    public function providePhpVersions(): array
+    public static function providePhpVersions(): array
     {
         return [
             [['apcu', 'pdo_mysql'], '8.2'],
@@ -23,7 +24,7 @@ class SupportedPhpExtensionsTest extends TestCase
         ];
     }
 
-    /** @dataProvider providePhpVersions */
+    #[DataProvider('providePhpVersions')]
     public function testItFiltersVersions($expected, $version): void
     {
         $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) use ($version) {

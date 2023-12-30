@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Objects;
 
 use BlameButton\LaravelDockerBuilder\Objects\Configuration;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -12,7 +13,7 @@ use BlameButton\LaravelDockerBuilder\Tests\TestCase;
  */
 class ConfigurationTest extends TestCase
 {
-    public function provideCommandOptions(): array
+    public static function provideCommandOptions(): array
     {
         return [
             [
@@ -36,13 +37,13 @@ class ConfigurationTest extends TestCase
 
         self::assertEquals('8.2', $config->getPhpVersion());
         self::assertEquals(['bcmath'], $config->getPhpExtensions());
-        self::assertEquals(true, $config->isArtisanOptimize());
-        self::assertEquals(true, $config->isAlpine());
+        self::assertTrue($config->isArtisanOptimize());
+        self::assertTrue($config->isAlpine());
         self::assertEquals('npm', $config->getNodePackageManager());
         self::assertEquals('vite', $config->getNodeBuildTool());
     }
 
-    /** @dataProvider provideCommandOptions */
+    #[DataProvider('provideCommandOptions')]
     public function testItGeneratesCorrectCommand(string $expected, Configuration $config): void
     {
         $output = $config->getCommand();

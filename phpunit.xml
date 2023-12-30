@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
-         cacheResultFile=".phpunit.cache/test-results"
-         executionOrder="depends,defects"
-         forceCoversAnnotation="true"
-         beStrictAboutCoversAnnotation="true"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         beStrictAboutCoverageMetadata="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
-         convertDeprecationsToExceptions="true"
+         bootstrap="vendor/autoload.php"
+         cacheResultFile=".phpunit.cache/test-results.json"
+         colors="true"
+         executionOrder="depends,defects"
          failOnRisky="true"
          failOnWarning="true"
-         verbose="true">
+         requireCoverageMetadata="true"
+>
     <testsuites>
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
     </testsuites>
 
-    <coverage cacheDirectory=".phpunit.cache/code-coverage"
-              processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-
-        <exclude>
-            <file>src/helpers.php</file>
-        </exclude>
-
+    <coverage cacheDirectory=".phpunit.cache/code-coverage">
         <report>
             <html outputDirectory=".coverage"/>
             <text outputFile="php://stdout" showOnlySummary="true"/>

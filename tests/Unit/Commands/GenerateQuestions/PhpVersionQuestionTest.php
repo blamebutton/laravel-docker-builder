@@ -9,6 +9,7 @@ use BlameButton\LaravelDockerBuilder\Detectors\PhpVersionDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -32,7 +33,7 @@ class PhpVersionQuestionTest extends TestCase
         app(PhpVersionQuestion::class)->getAnswer($mock);
     }
 
-    private function provideOptions(): array
+    public static function provideOptions(): array
     {
         return [
             '8.2' => [PhpVersion::v8_2, '8.2'],
@@ -41,7 +42,7 @@ class PhpVersionQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideOptions */
+    #[DataProvider('provideOptions')]
     public function testItHandlesOptions($expected, $input): void
     {
         $mock = $this->createMock(BaseCommand::class);
@@ -56,7 +57,7 @@ class PhpVersionQuestionTest extends TestCase
         self::assertEquals($expected, $answer);
     }
 
-    public function provideDetected(): array
+    public static function provideDetected(): array
     {
         return [
             '8.2' => [PhpVersion::v8_2, '8.2'],
@@ -65,7 +66,7 @@ class PhpVersionQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideDetected */
+    #[DataProvider('provideDetected')]
     public function testItDetectsPackageManagers($expected, $detected): void
     {
         $mock = $this->createMock(BaseCommand::class);
@@ -85,7 +86,7 @@ class PhpVersionQuestionTest extends TestCase
         self::assertEquals($expected, $answer);
     }
 
-    public function provideQuestionInput(): array
+    public static function provideQuestionInput(): array
     {
         return [
             '8.2' => ['8.2', '8.2'],
@@ -94,7 +95,7 @@ class PhpVersionQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideQuestionInput */
+    #[DataProvider('provideQuestionInput')]
     public function testItAsksQuestion($expected, $input): void
     {
         $mock = $this->createMock(BaseCommand::class);

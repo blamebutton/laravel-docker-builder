@@ -9,6 +9,7 @@ use BlameButton\LaravelDockerBuilder\Detectors\NodePackageManagerDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -32,7 +33,7 @@ class NodePackageManagerQuestionTest extends TestCase
         app(NodePackageManagerQuestion::class)->getAnswer($mock);
     }
 
-    private function provideOptions(): array
+    public static function provideOptions(): array
     {
         return [
             'npm' => [NodePackageManager::NPM, 'npm'],
@@ -40,7 +41,7 @@ class NodePackageManagerQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideOptions */
+    #[DataProvider('provideOptions')]
     public function testItHandlesOptions($expected, $input): void
     {
         $mock = $this->createMock(BaseCommand::class);
@@ -55,7 +56,7 @@ class NodePackageManagerQuestionTest extends TestCase
         self::assertEquals($expected, $answer);
     }
 
-    public function provideDetectedPackageManagers(): array
+    public static function provideDetectedPackageManagers(): array
     {
         return [
             'npm' => [NodePackageManager::NPM, NodePackageManager::NPM],
@@ -63,7 +64,7 @@ class NodePackageManagerQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideDetectedPackageManagers */
+    #[DataProvider('provideDetectedPackageManagers')]
     public function testItDetectsPackageManagers($expected, $detected): void
     {
         $mock = $this->createMock(BaseCommand::class);
@@ -83,7 +84,7 @@ class NodePackageManagerQuestionTest extends TestCase
         self::assertEquals($expected, $answer);
     }
 
-    public function provideQuestionInput(): array
+    public static function provideQuestionInput(): array
     {
         return [
             'npm' => ['npm', 'npm'],
@@ -91,7 +92,7 @@ class NodePackageManagerQuestionTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideQuestionInput */
+    #[DataProvider('provideQuestionInput')]
     public function testItAsksQuestion($expected, $input): void
     {
         $mock = $this->createMock(BaseCommand::class);

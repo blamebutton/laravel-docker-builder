@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Detectors;
 
 use BlameButton\LaravelDockerBuilder\Detectors\PhpExtensionsDetector;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses   \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -33,7 +34,7 @@ class PhpExtensionsDetectorTest extends TestCase
         });
     }
 
-    public function provideConfigurations(): array
+    public static function provideConfigurations(): array
     {
         return [
             [
@@ -125,7 +126,7 @@ class PhpExtensionsDetectorTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideConfigurations */
+    #[DataProvider('provideConfigurations')]
     public function testItDetectsExtensionsWithoutDuplicates(array $expected, array $config): void
     {
         config()->set($config);
@@ -142,7 +143,7 @@ class PhpExtensionsDetectorTest extends TestCase
         self::assertEquals(['bcmath'], $detected);
     }
 
-    public function provideCacheConfigurations(): array
+    public static function provideCacheConfigurations(): array
     {
         return [
             'apc' => [
@@ -164,7 +165,7 @@ class PhpExtensionsDetectorTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideCacheConfigurations */
+    #[DataProvider('provideCacheConfigurations')]
     public function testItDetectsCacheExtensions(array $expected, array $config): void
     {
         config()->set($config);
@@ -174,7 +175,7 @@ class PhpExtensionsDetectorTest extends TestCase
         self::assertEquals($expected, $detected);
     }
 
-    public function provideDatabaseConfigurations(): array
+    public static function provideDatabaseConfigurations(): array
     {
         return [
             'mysql' => [
@@ -196,7 +197,7 @@ class PhpExtensionsDetectorTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideDatabaseConfigurations */
+    #[DataProvider('provideDatabaseConfigurations')]
     public function testItDetectsDatabaseExtensions(array $expected, array $config): void
     {
         config()->set($config);
@@ -206,7 +207,7 @@ class PhpExtensionsDetectorTest extends TestCase
         self::assertEquals($expected, $detected);
     }
 
-    public function provideBroadcastingConfigurations(): array
+    public static function provideBroadcastingConfigurations(): array
     {
         return [
             'redis' => [
@@ -220,7 +221,7 @@ class PhpExtensionsDetectorTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideBroadcastingConfigurations */
+    #[DataProvider('provideBroadcastingConfigurations')]
     public function testItDetectsBroadcastingExtensions(array $expected, array $config): void
     {
         config()->set($config);
@@ -230,7 +231,7 @@ class PhpExtensionsDetectorTest extends TestCase
         self::assertEquals($expected, $detected);
     }
 
-    public function provideQueueConfigurations(): array
+    public static function provideQueueConfigurations(): array
     {
         return [
             'redis' => [
@@ -244,7 +245,7 @@ class PhpExtensionsDetectorTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideQueueConfigurations */
+    #[DataProvider('provideQueueConfigurations')]
     public function testItDetectsQueueExtensions(array $expected, array $config): void
     {
         config()->set($config);
@@ -254,7 +255,7 @@ class PhpExtensionsDetectorTest extends TestCase
         self::assertEquals($expected, $detected);
     }
 
-    public function provideSessionConfigurations(): array
+    public static function provideSessionConfigurations(): array
     {
         return [
             'apc' => [
@@ -276,7 +277,7 @@ class PhpExtensionsDetectorTest extends TestCase
         ];
     }
 
-    /** @dataProvider provideSessionConfigurations */
+    #[DataProvider('provideSessionConfigurations')]
     public function testItDetectsSessionExtensions(array $expected, array $config): void
     {
         config()->set($config);

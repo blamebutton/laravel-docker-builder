@@ -5,6 +5,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Unit\Detectors;
 use BlameButton\LaravelDockerBuilder\Detectors\NodePackageManagerDetector;
 use BlameButton\LaravelDockerBuilder\Tests\TestCase;
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @uses \BlameButton\LaravelDockerBuilder\DockerServiceProvider
@@ -24,7 +25,7 @@ class NodePackageManagerTest extends TestCase
         ]);
     }
 
-    public function providePathMappings(): array
+    public static function providePathMappings(): array
     {
         return [
             'npm' => ['npm', 'package-lock.json'],
@@ -32,7 +33,7 @@ class NodePackageManagerTest extends TestCase
         ];
     }
 
-    /** @dataProvider providePathMappings */
+    #[DataProvider('providePathMappings')]
     public function testItDetectsPaths(string|bool $expected, string $filename): void
     {
         touch(base_path($filename));

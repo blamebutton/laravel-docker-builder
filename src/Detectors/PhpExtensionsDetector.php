@@ -9,7 +9,7 @@ class PhpExtensionsDetector implements DetectorContract
 {
     private array $supported;
 
-    public function supported(array $supported = null): self|array
+    public function supported(?array $supported = null): self|array
     {
         if (is_null($supported)) {
             return $this->supported;
