@@ -11,11 +11,10 @@ on:
 
 jobs:
   phpunit:
-    name: "P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}"
-    runs-on: "${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 5
-
     strategy:
+      fail-fast: true
       matrix:
         os: [ 'ubuntu-latest', 'macos-latest' ]
         php: [ '8.3', '8.2', '8.1', '8.0', ]
@@ -29,6 +28,8 @@ jobs:
         exclude:
           - laravel: '11.*'
             php: '8.0'
+
+    name: "P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}"
 
     steps:
       - name: Checkout code
