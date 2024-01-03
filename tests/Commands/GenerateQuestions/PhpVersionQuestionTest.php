@@ -3,7 +3,6 @@
 namespace BlameButton\LaravelDockerBuilder\Tests\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
-use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion;
 use BlameButton\LaravelDockerBuilder\Detectors\PhpVersionDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
@@ -36,9 +35,9 @@ class PhpVersionQuestionTest extends TestCase
     public static function provideOptions(): array
     {
         return [
-            '8.2' => [PhpVersion::v8_2, '8.2'],
-            '8.1' => [PhpVersion::v8_1, '8.1'],
-            '8.0' => [PhpVersion::v8_0, '8.0'],
+            '8.3' => ['8.3', '8.3'],
+            '8.2' => ['8.2', '8.2'],
+            '8.1' => ['8.1', '8.1'],
         ];
     }
 
@@ -60,9 +59,9 @@ class PhpVersionQuestionTest extends TestCase
     public static function provideDetected(): array
     {
         return [
-            '8.2' => [PhpVersion::v8_2, '8.2'],
-            '8.1' => [PhpVersion::v8_1, '8.1'],
-            '8.0' => [PhpVersion::v8_0, '8.0'],
+            '8.3' => ['8.3', '8.3'],
+            '8.2' => ['8.2', '8.2'],
+            '8.1' => ['8.1', '8.1'],
         ];
     }
 
@@ -89,9 +88,9 @@ class PhpVersionQuestionTest extends TestCase
     public static function provideQuestionInput(): array
     {
         return [
+            '8.3' => ['8.3', '8.3'],
             '8.2' => ['8.2', '8.2'],
             '8.1' => ['8.1', '8.1'],
-            '8.0' => ['8.0', '8.0'],
         ];
     }
 

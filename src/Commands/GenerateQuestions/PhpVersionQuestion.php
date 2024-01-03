@@ -9,10 +9,14 @@ use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 
 class PhpVersionQuestion extends BaseQuestion
 {
+    public function __construct(
+        private readonly PhpVersionDetector $phpVersionDetector,
+    ) {
+    }
+
     /**
      * Get the PHP version, either by detecting it from the "composer.json",
      * from the "php-version" option, or asking the user.
-     *
      *
      * @throws InvalidOptionValueException when an unsupported PHP version is passed
      */
@@ -24,16 +28,16 @@ class PhpVersionQuestion extends BaseQuestion
                 : throw new InvalidOptionValueException("Invalid value [$option] for option [php-version].");
         }
 
-        $detected = app(PhpVersionDetector::class)->detect();
+        $detected = $this->phpVersionDetector->detect();
 
-        if ($detected && $command->option('detect')) {
-            return (string) $detected;
+        if ($detected !== false && $command->option('detect')) {
+            return PhpVersion::from($detected)->label();
         }
 
         return $command->choice(
             question: 'PHP version',
             choices: PhpVersion::values(),
-            default: $detected ?: PhpVersion::v8_2,
+            default: $detected ?: PhpVersion::v8_3->label(),
         );
     }
 }

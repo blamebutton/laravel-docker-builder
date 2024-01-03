@@ -2,20 +2,19 @@
 
 namespace BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices;
 
-class PhpVersion
+enum PhpVersion: string
 {
-    public const v8_2 = '8.2';
-
-    public const v8_1 = '8.1';
-
-    public const v8_0 = '8.0';
+    case v8_3 = '8.3';
+    case v8_2 = '8.2';
+    case v8_1 = '8.1';
 
     public static function values(): array
     {
-        return [
-            self::v8_2,
-            self::v8_1,
-            self::v8_0,
-        ];
+        return array_map(fn (self $version) => $version->value, self::cases());
+    }
+
+    public function label(): string
+    {
+        return $this->value;
     }
 }

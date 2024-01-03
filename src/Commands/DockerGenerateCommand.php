@@ -26,16 +26,22 @@ class DockerGenerateCommand extends BaseCommand
 
     protected $description = 'Generate Dockerfiles';
 
-    public function handle(): int
-    {
+    public function handle(
+        PhpVersionQuestion $phpVersionQuestion,
+        PhpExtensionsQuestion $phpExtensionsQuestion,
+        ArtisanOptimizeQuestion $artisanOptimizeQuestion,
+        AlpineQuestion $alpineQuestion,
+        NodePackageManagerQuestion $nodePackageManagerQuestion,
+        NodeBuildToolQuestion $nodeBuildToolQuestion,
+    ): int {
         try {
             $config = new Configuration(
-                phpVersion: $phpVersion = app(PhpVersionQuestion::class)->getAnswer($this),
-                phpExtensions: app(PhpExtensionsQuestion::class)->getAnswer($this, $phpVersion),
-                artisanOptimize: app(ArtisanOptimizeQuestion::class)->getAnswer($this),
-                alpine: app(AlpineQuestion::class)->getAnswer($this),
-                nodePackageManager: $nodePackageManager = app(NodePackageManagerQuestion::class)->getAnswer($this),
-                nodeBuildTool: $nodePackageManager ? app(NodeBuildToolQuestion::class)->getAnswer($this) : false,
+                phpVersion: $phpVersion = PhpVersion::from($phpVersionQuestion->getAnswer($this)),
+                phpExtensions: $phpExtensionsQuestion->getAnswer($this, $phpVersion),
+                artisanOptimize: $artisanOptimizeQuestion->getAnswer($this),
+                alpine: $alpineQuestion->getAnswer($this),
+                nodePackageManager: $nodePackageManager = $nodePackageManagerQuestion->getAnswer($this),
+                nodeBuildTool: $nodePackageManager ? $nodeBuildToolQuestion->getAnswer($this) : false,
             );
         } catch (InvalidOptionValueException $exception) {
             $this->error($exception->getMessage());
@@ -67,7 +73,7 @@ class DockerGenerateCommand extends BaseCommand
 
         $this->table(['Key', 'Value'], [
             ['PHP version',
-                '<comment>'.$config->getPhpVersion().'</comment>',
+                '<comment>'.$config->getPhpVersion()->label().'</comment>',
             ],
             ['PHP extensions',
                 implode(', ', $config->getPhpExtensions()),
@@ -100,7 +106,7 @@ class DockerGenerateCommand extends BaseCommand
         $this->info('Saving Dockerfiles:');
 
         $context = [
-            'php_version' => $config->getPhpVersion(),
+            'php_version' => $config->getPhpVersion()->label(),
             'php_extensions' => implode(' ', $config->getPhpExtensions()),
             'artisan_optimize' => $config->isArtisanOptimize(),
             'alpine' => $config->isAlpine(),

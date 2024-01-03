@@ -4,19 +4,24 @@ namespace BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpExtensions;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
 use BlameButton\LaravelDockerBuilder\Detectors\PhpExtensionsDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
 
 class PhpExtensionsQuestion extends BaseQuestion
 {
+    public function __construct(
+        private readonly PhpExtensionsDetector $phpExtensionsDetector,
+    ) {
+    }
+
     /**
      * Get the PHP extensions, either by detecting them from the application's configuration,
      * from the "php-extensions" option, or asking the user.
      *
-     *
      * @throws InvalidOptionValueException when an unsupported extension is passed
      */
-    public function getAnswer(BaseCommand $command, string $phpVersion): array
+    public function getAnswer(BaseCommand $command, PhpVersion $phpVersion): array
     {
         $supported = PhpExtensions::values($phpVersion);
 
@@ -34,7 +39,7 @@ class PhpExtensionsQuestion extends BaseQuestion
             return array_intersect($extensions, $supported);
         }
 
-        $detected = app(PhpExtensionsDetector::class)
+        $detected = $this->phpExtensionsDetector
             ->supported($supported)
             ->detect();
 

@@ -3,6 +3,7 @@
 namespace BlameButton\LaravelDockerBuilder\Tests\Commands\GenerateQuestions;
 
 use BlameButton\LaravelDockerBuilder\Commands\BaseCommand;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpExtensionsQuestion;
 use BlameButton\LaravelDockerBuilder\Detectors\PhpExtensionsDetector;
 use BlameButton\LaravelDockerBuilder\Exceptions\InvalidOptionValueException;
@@ -22,8 +23,8 @@ class PhpExtensionsQuestionTest extends TestCase
     {
         $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
             $mock->shouldReceive('get')
-                ->with('8.2')
                 ->once()
+                ->with(PhpVersion::v8_3)
                 ->andReturn(['bcmath', 'pdo_mysql']);
         });
 
@@ -36,15 +37,15 @@ class PhpExtensionsQuestionTest extends TestCase
         $this->expectException(InvalidOptionValueException::class);
         $this->expectExceptionMessage('Extension [redis] is not supported.');
 
-        app(PhpExtensionsQuestion::class)->getAnswer($mock, '8.2');
+        app(PhpExtensionsQuestion::class)->getAnswer($mock, PhpVersion::v8_3);
     }
 
     public function testItUsesOptionInput(): void
     {
-        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
+        $this->mock(SupportedPhpExtensions::class, function (SupportedPhpExtensions&MockInterface $mock) {
             $mock->shouldReceive('get')
-                ->with('8.2')
                 ->once()
+                ->with(PhpVersion::v8_3)
                 ->andReturn(['bcmath', 'pdo_mysql', 'redis']);
         });
 
@@ -54,7 +55,7 @@ class PhpExtensionsQuestionTest extends TestCase
             ->with('php-extensions')
             ->willReturn('bcmath,pdo_mysql');
 
-        $answer = app(PhpExtensionsQuestion::class)->getAnswer($mock, '8.2');
+        $answer = app(PhpExtensionsQuestion::class)->getAnswer($mock, PhpVersion::v8_3);
 
         self::assertEquals(['bcmath', 'pdo_mysql'], $answer);
     }
@@ -67,12 +68,14 @@ class PhpExtensionsQuestionTest extends TestCase
                 ->andReturn(['bcmath', 'pdo_mysql', 'redis']);
         });
 
-        $this->partialMock(PhpExtensionsDetector::class, function (MockInterface $mock) {
+        $this->partialMock(PhpExtensionsDetector::class, function (PhpExtensionsDetector&MockInterface $mock) {
             $mock->shouldReceive('supported')
                 ->once()
+                ->with(['bcmath', 'pdo_mysql', 'redis'])
                 ->andReturnSelf();
             $mock->shouldReceive('detect')
                 ->once()
+                ->withNoArgs()
                 ->andReturn(['bcmath', 'pdo_mysql']);
         });
 
@@ -84,7 +87,7 @@ class PhpExtensionsQuestionTest extends TestCase
                 ['detect', true],
             ]);
 
-        $answer = app(PhpExtensionsQuestion::class)->getAnswer($mock, '8.2');
+        $answer = app(PhpExtensionsQuestion::class)->getAnswer($mock, PhpVersion::v8_3);
 
         self::assertEquals(['bcmath', 'pdo_mysql'], $answer);
     }
@@ -117,7 +120,7 @@ class PhpExtensionsQuestionTest extends TestCase
             ->method('choice')
             ->willReturn(['bcmath', 'pdo_mysql']);
 
-        $answer = app(PhpExtensionsQuestion::class)->getAnswer($mock, '8.2');
+        $answer = app(PhpExtensionsQuestion::class)->getAnswer($mock, PhpVersion::v8_3);
 
         self::assertEquals(['bcmath', 'pdo_mysql'], $answer);
     }

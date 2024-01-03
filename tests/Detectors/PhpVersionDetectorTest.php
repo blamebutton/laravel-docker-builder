@@ -45,12 +45,13 @@ class PhpVersionDetectorTest extends TestCase
     public static function provideVersions(): array
     {
         return [
+            ['8.3', '8.3.*'],
+            ['8.3', '~8.3'],
+            ['8.3', '^8.3'],
             ['8.2', '^8.2'],
             ['8.2', '>=8.2'],
             ['8.1', '~8.1'],
             ['8.1', '8.1.*'],
-            ['8.0', '^8.0.2'],
-            ['8.0', '8.0.24'],
         ];
     }
 

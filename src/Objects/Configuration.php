@@ -2,22 +2,24 @@
 
 namespace BlameButton\LaravelDockerBuilder\Objects;
 
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
+
 class Configuration
 {
     /**
      * @param  string[]  $phpExtensions
      */
     public function __construct(
-        private string $phpVersion,
-        private array $phpExtensions,
-        private bool $artisanOptimize,
-        private bool $alpine,
-        private string|false $nodePackageManager,
-        private string|false $nodeBuildTool,
+        private readonly PhpVersion $phpVersion,
+        private readonly array $phpExtensions,
+        private readonly bool $artisanOptimize,
+        private readonly bool $alpine,
+        private readonly string|false $nodePackageManager,
+        private readonly string|false $nodeBuildTool,
     ) {
     }
 
-    public function getPhpVersion(): string
+    public function getPhpVersion(): PhpVersion
     {
         return $this->phpVersion;
     }
@@ -58,7 +60,7 @@ class Configuration
         return array_values(array_filter([
             'php', 'artisan', 'docker:generate',
             '-n', // --no-interaction
-            '-p '.$this->getPhpVersion(), // --php-version
+            '-p '.$this->getPhpVersion()->label(), // --php-version
             '-e '.implode(',', $this->getPhpExtensions()), // --php-extensions
             $this->isArtisanOptimize() ? '-o' : null, // --optimize
             $this->isAlpine() ? '-a' : null, // --alpine

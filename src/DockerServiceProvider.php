@@ -32,7 +32,7 @@ class DockerServiceProvider extends ServiceProvider
         ]);
 
         $this->mergeConfigFrom(
-            __DIR__.'/../config/docker-builder.php', 'docker-builder',
+            dirname(__DIR__).'/config/docker-builder.php', 'docker-builder',
         );
     }
 }

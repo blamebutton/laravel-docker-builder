@@ -4,6 +4,7 @@ namespace BlameButton\LaravelDockerBuilder\Tests\Commands;
 
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\AlpineQuestion;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\ArtisanOptimizeQuestion;
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpExtensionsQuestion;
 use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\PhpVersionQuestion;
 use BlameButton\LaravelDockerBuilder\Detectors\NodePackageManagerDetector;
@@ -113,13 +114,13 @@ class DockerGenerateCommandTest extends TestCase
     #[DataProvider('provideIsInformationCorrectAnswer')]
     public function testItAsksQuestions(string $isCorrect): void
     {
-        $this->mock(SupportedPhpExtensions::class, function (MockInterface $mock) {
-            $mock->shouldReceive('get')->with('8.2')->once()->andReturn(['bcmath', 'redis']);
-            $mock->shouldReceive('get')->with(null)->andReturn(['not the same as with 8.2']);
+        $this->mock(SupportedPhpExtensions::class, function (SupportedPhpExtensions&MockInterface $mock) {
+            $mock->shouldReceive('get')->with(PhpVersion::v8_3)->once()->andReturn(['bcmath', 'redis']);
+            $mock->shouldReceive('get')->with(null)->andReturn(['not the same as with 8.3']);
         });
 
         $command = $this->artisan('docker:generate');
-        $command->expectsChoice('PHP version', '8.2', ['8.2', '8.1', '8.0']);
+        $command->expectsChoice('PHP version', '8.3', ['8.3', '8.2', '8.1']);
         $command->expectsChoice('PHP extensions', ['bcmath', 'redis'], ['bcmath', 'redis']);
         $command->expectsConfirmation('Do you want to run "php artisan optimize" when the image boots?', 'yes');
         $command->expectsConfirmation('Do you want to use "Alpine Linux" based images?', 'yes');
@@ -129,7 +130,7 @@ class DockerGenerateCommandTest extends TestCase
         if ($isCorrect === 'yes') {
             $command->expectsOutput('Configuration:');
             $command->expectsTable(['Key', 'Value'], [
-                ['PHP version', '8.2'],
+                ['PHP version', '8.3'],
                 ['PHP extensions', 'bcmath, redis'],
                 ['Artisan Optimize', 'true'],
                 ['Alpine images', 'true'],
@@ -137,7 +138,7 @@ class DockerGenerateCommandTest extends TestCase
                 ['Node build tool', 'Vite.js'],
             ]);
             $command->expectsOutput('Command to generate above configuration:');
-            $command->expectsOutput('  php artisan docker:generate -n -p 8.2 -e bcmath,redis -o -a -m npm -b vite');
+            $command->expectsOutput('  php artisan docker:generate -n -p 8.3 -e bcmath,redis -o -a -m npm -b vite');
         } else {
             $command->expectsOutput('Exiting.');
         }
@@ -176,19 +177,19 @@ class DockerGenerateCommandTest extends TestCase
 
     public function testItAcceptsNodePackageManagerNone(): void
     {
-        $this->mock(PhpVersionQuestion::class, function (MockInterface $mock) {
+        $this->mock(PhpVersionQuestion::class, function (PhpVersionQuestion&MockInterface $mock) {
             $mock->shouldReceive('getAnswer')->once()->andReturn('8.2');
         });
-        $this->mock(PhpExtensionsQuestion::class, function (MockInterface $mock) {
+        $this->mock(PhpExtensionsQuestion::class, function (PhpExtensionsQuestion&MockInterface $mock) {
             $mock->shouldReceive('getAnswer')->once()->andReturn(['bcmath']);
         });
-        $this->mock(ArtisanOptimizeQuestion::class, function (MockInterface $mock) {
+        $this->mock(ArtisanOptimizeQuestion::class, function (ArtisanOptimizeQuestion&MockInterface $mock) {
             $mock->shouldReceive('getAnswer')->once()->andReturn(true);
         });
-        $this->mock(AlpineQuestion::class, function (MockInterface $mock) {
+        $this->mock(AlpineQuestion::class, function (AlpineQuestion&MockInterface $mock) {
             $mock->shouldReceive('getAnswer')->once()->andReturn(true);
         });
-        $this->mock(NodePackageManagerDetector::class, function (MockInterface $mock) {
+        $this->mock(NodePackageManagerDetector::class, function (NodePackageManagerDetector&MockInterface $mock) {
             $mock->shouldReceive('detect')->once()->andReturn(false);
         });
 

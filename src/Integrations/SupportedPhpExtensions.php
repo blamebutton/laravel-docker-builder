@@ -2,6 +2,7 @@
 
 namespace BlameButton\LaravelDockerBuilder\Integrations;
 
+use BlameButton\LaravelDockerBuilder\Commands\GenerateQuestions\Choices\PhpVersion;
 use Illuminate\Support\Facades\Http;
 
 class SupportedPhpExtensions
@@ -10,7 +11,7 @@ class SupportedPhpExtensions
 
     private ?array $cache = null;
 
-    public function get(?string $phpVersion = null): array
+    public function get(?PhpVersion $phpVersion = null): array
     {
         if (! is_null($this->cache)) {
             return $this->cache;
@@ -23,7 +24,7 @@ class SupportedPhpExtensions
         }
 
         return $this->cache = collect($contents)
-            ->filter(fn (string $extension): bool => is_null($phpVersion) || str($extension)->contains($phpVersion))
+            ->filter(fn (string $extension): bool => is_null($phpVersion) || str($extension)->contains($phpVersion->label()))
             ->map(fn (string $extension): string => str($extension)->trim()->before(' '))
             ->filter()
             ->values()

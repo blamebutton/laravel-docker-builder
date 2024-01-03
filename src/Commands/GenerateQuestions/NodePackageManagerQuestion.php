@@ -13,7 +13,6 @@ class NodePackageManagerQuestion extends BaseQuestion
      * Get the Node Package Manager, either by detecting it from files present (package-lock.json, yarn.lock),
      * from the "node-package-manager" option, or asking the user.
      *
-     *
      * @throws InvalidOptionValueException
      */
     public function getAnswer(BaseCommand $command): string|false
