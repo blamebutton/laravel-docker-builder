@@ -27,7 +27,7 @@
     "composer/semver": "^3.3",
     "guzzlehttp/guzzle": "^7.5",
     "illuminate/contracts": "^10.0 | ^11.0",
-    "pestphp/pest": "^2.30",
+    "pestphp/pest": "^2.30 || ^4.0",
     "twig/twig": "^3.0"
   },
   "require-dev": {
